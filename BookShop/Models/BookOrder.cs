@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookShop.Models
 {
-    public  class BookOrder
+    public  class BookOrder //строка заказа
     {
         [Required]
         [Key]

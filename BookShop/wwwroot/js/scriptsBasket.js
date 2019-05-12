@@ -28,7 +28,7 @@ function GetOrder() {//получение id текущего заказа и е
     loadHistory(); //загрузка истории заказов
 }
 
-function loadHistory() {
+function loadHistory() {//загрузка истории заказов пользователя
     var i, y = "";
     var request = new XMLHttpRequest();
     request.open("GET", uri2, false);
@@ -74,7 +74,7 @@ function MakeOrder() {//Active=0, создать новый текущий за�
     request.send();
 }
 
-function loadBook(id,idItem) {
+function loadBook(id,idItem) {//отображение конкретной книги
     var i;
     books = null;
     var request = new XMLHttpRequest();
@@ -105,9 +105,9 @@ function deleteOrder(id, cost) { //order.sum-sum of book
     request.onload = function () {
         updateOrder(cost);
         GetOrder();
+        loadBooks();
     };
     request.send();
-    GetOrder();
 }
 
 function updateOrder(cost) {
@@ -128,10 +128,10 @@ function updateOrder(cost) {
                 };
                 request2.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 request2.send(JSON.stringify(item));
-                GetOrder();
+        GetOrder();
+        loadBooks();
  
     };
-    GetOrder();
     request1.send();
 }
 //==================

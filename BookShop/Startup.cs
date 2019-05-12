@@ -36,9 +36,7 @@ namespace BookShop
            
             services.AddDbContext<BookingContext>(options =>
             options.UseSqlServer(connection));
-            //services.AddDbContext<BookingContext>(opt =>
-            //    opt.UseInMemoryDatabase("Booking"));
-
+      
             services.AddMvc().AddJsonOptions(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -47,7 +45,7 @@ namespace BookShop
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.ConfigureApplicationCookie(options =>
-            {
+            {//401 ошибка если недостаточно прав
                 options.Cookie.Name = "SimpleWebApp";
                 options.LoginPath = "/";
                 options.AccessDeniedPath = "/";

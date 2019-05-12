@@ -20,11 +20,11 @@ namespace BookShop.Models
         [Required]
         [ForeignKey("User")]
         public string UserId { get; set; }
-        public DateTime DateDelivery { get; set; }
-        public DateTime DateOrder { get; set; }
-        public int SumOrder { get; set; }
-        public int SumDelivery { get; set; }
-        public int Active { get; set; }
+        public DateTime DateDelivery { get; set; }//дата доставки
+        public DateTime DateOrder { get; set; }//дата заказа
+        public int SumOrder { get; set; } //стоимость заказа
+        public int SumDelivery { get; set; } //стоимость доставки
+        public int Active { get; set; } //является ли заказ активным
         //public string Url { get; set; }
         public virtual ICollection<BookOrder> BookOrders { get; set; }
         public virtual User User { get; set; }

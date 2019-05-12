@@ -4,7 +4,7 @@
     ////    Register);, false
     //window.addEventListener('load',
 document.querySelector("#registerBtn").addEventListener("click",
- function () {
+ function () {//валидация формы, если не все значения введены -- обозначает нужные поля
          //Fetch all the forms we want to apply custom Bootstrap validation styles to
         var forms = document.getElementsByClassName('needs-validation')
          //Loop over them and prevent submission
@@ -32,14 +32,14 @@ function Register() {
     var password = document.querySelector("#password").value;
     var passwordConfirm = document.querySelector("#passwordConfirm").value;
     let request = new XMLHttpRequest();
-    request.open("POST", uri);
+    request.open("POST", uri);//запрос на регистрацию - -создание нового пользователя
     request.setRequestHeader("Accepts",
         "application/json;charset=UTF-8");
     request.setRequestHeader("Content-Type",
         "application/json;charset=UTF-8");
     // Обработка ответа
     request.onload = function () {
-       ParseResponse(this);
+       ParseResponse(this); //выводим список ошибок или результат регистрации
     };
     // Запрос на сервер
     request.send(JSON.stringify({
@@ -73,7 +73,7 @@ function ParseResponse(e) {
             ul.appendChild(li);
         }
     }
-    alert(response.message);
+   // alert(response.message);
     
   //  window.location.href = "index.html";
     

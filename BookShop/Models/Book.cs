@@ -14,11 +14,11 @@ namespace BookShop.Models
         [Required]
         [Key]
         public int Id { get; set; }
-        public string Publisher { get; set; }
-        public string image { get; set; }
-        public string Year { get; set; }
-        public int Cost { get; set; }
-        public string Author { get; set; }
+        public string Publisher { get; set; } //издательство
+        public string image { get; set; } //url картинки
+        public string Year { get; set; } //год публикации
+        public int Cost { get; set; } //стоимость
+        public string Author { get; set; } //автор(-ы)
         public string Content { get; set; } //Описание (аннотация) книги
         [Required]
         public string Title { get; set; } //Название книги

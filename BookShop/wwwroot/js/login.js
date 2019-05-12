@@ -48,7 +48,6 @@ function logIn() {
         rememberMe: remember
     }));
     // вывести результат
-    //alert("/n msg.message " + request.s); // responseText -- текст ответа.
    if (isauto == 1) window.location.href = "index.html";
 
 }

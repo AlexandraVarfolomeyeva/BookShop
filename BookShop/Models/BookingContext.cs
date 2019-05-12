@@ -28,8 +28,6 @@ namespace BookShop.Models
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Order>(entity =>
             {
-                //entity.Property(e => e.User).IsRequired();
-               // entity.Property(e => e.BookOrders).IsRequired();
                 entity.HasOne(a => a.User).WithMany(b => b.Orders).HasForeignKey(d => d.UserId);
                 entity.HasMany(a => a.BookOrders).WithOne(a => a.Order).HasForeignKey(a => a.IdOrder);
                
@@ -38,20 +36,13 @@ namespace BookShop.Models
             modelBuilder.Entity<Book>(entity =>
             {
                 entity.HasMany(a => a.BookOrders).WithOne(a => a.Book).HasForeignKey(a => a.IdBook);
-             //   entity.HasOne(a => a.Publisher).WithMany(a=>a.Books).HasForeignKey(a=>a.PublisherId);
             });
 
-            //modelBuilder.Entity<Publisher>(entity =>
-            //{
-            //    entity.HasMany(a => a.Books).WithOne(a => a.Publisher).HasForeignKey(a => a.PublisherId);
-            //});
+
             
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasMany(a => a.Orders).WithOne(b => b.User).HasForeignKey(c => c.UserId);
-                //entity.Property(e => e.Login).IsRequired();
-                //entity.Property(e => e.Password).IsRequired();
-                //entity.Property(e => e.Url).IsRequired();
             });
             modelBuilder.Entity<BookOrder>(entity =>
             {

@@ -26,13 +26,13 @@ namespace BookShop.Controllers
 
         [HttpGet]
         public IEnumerable<BookOrder> GetAll()
-        {
+        {//получение всех строк заказа
             return _context.BookOrder;
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBookOrder([FromRoute] int id)
-        {
+        {//получение конкретной строки заказа по id
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -52,7 +52,7 @@ namespace BookShop.Controllers
     [HttpPost]
         [Authorize(Roles = "user")]
         public async Task<IActionResult> Create([FromBody] BookOrder item)
-        {
+        {//создание новой строки заказа
           //  string id = IDEvent().Result;//получили id пользователя
             if (!ModelState.IsValid)
             {
@@ -68,7 +68,7 @@ namespace BookShop.Controllers
         [HttpDelete("{id}")]
         [Authorize(Roles = "user")]
         public async Task<IActionResult> Delete([FromRoute] int id)
-        {
+        {//удаление существующей строки заказа
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
