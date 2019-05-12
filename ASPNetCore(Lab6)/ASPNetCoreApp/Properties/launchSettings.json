@@ -4,8 +4,8 @@
     "windowsAuthentication": false, 
     "anonymousAuthentication": true, 
     "iisExpress": {
-      "applicationUrl": "http://localhost:64755",
-      "sslPort": 44334
+      "applicationUrl": "http://localhost:54797",
+      "sslPort": 44399
     }
   },
   "profiles": {
@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "BookShop": {
+    "ASPNetCoreApp": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",

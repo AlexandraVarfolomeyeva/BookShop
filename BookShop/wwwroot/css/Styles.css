@@ -1,0 +1,16 @@
+﻿#BasketDiv {
+    background-color: lightgrey;
+    border-style: groove;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    margin-right: 50px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+
+#user {
+    padding-bottom: 10px;
+    float: right;
+}
+
+

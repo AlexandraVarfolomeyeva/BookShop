@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Register</title>
+    <style>
+        .msg-error {
+            color: red;
+        }
+
+        button {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <a href="Index.html">Основная страница</a>
+    <h2>Регистрация нового пользователя</h2>
+    <div class="msg-error">
+        <div id="msg"></div>
+        <ul id="formError"></ul>
+    </div>
+    <form>
+        <label for="email">Email: </label>
+        <br />
+        <input type="text" id="email" name="email">
+        <br />
+        <label for="password">Пароль: </label>
+        <br />
+        <input type="password" id="password" name="password">
+        <br />
+        <label for="passwordConfirm">Подтверждение пароля: </label>
+        <br />
+        <input type="password" id="passwordConfirm" name="passwordConfirm">
+    </form>
+    <button id="registerBtn">Регистрация</button>
+
+    <script src="js/register.js"></script>
+</body>
+</html>
