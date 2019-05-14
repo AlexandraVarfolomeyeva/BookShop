@@ -31,11 +31,16 @@ namespace BookShop.Controllers
            string id = IDEvent().Result; //получаем id текущего пользователя из AccountController
             try
             {//возвращаем список всех заказов для текущего пользователя
-              return _context.Order.Include(p => p.BookOrders).Where(p => p.UserId == id);
+                if (id !="")
+                Log.WriteSuccess(" OrdersController.GetAll", "возвращаем список всех заказов для текущего пользователя.");
+                else
+                    Log.WriteSuccess(" OrdersController.GetAll", "Пользователь не орпределен.");
+                return _context.Order.Include(p => p.BookOrders).Where(p => p.UserId == id);
             
-            } catch
+            } catch (Exception ex)
             {//если что-то пошло не так, выводим исключение в консоль
                 Console.WriteLine("Возникла ошибка при получении списка всех заказов.");
+                Log.Write(ex);
                 return null;
             }
         }
@@ -46,43 +51,66 @@ namespace BookShop.Controllers
         //получить заказ по его id
         public async Task<IActionResult> GetOrder([FromRoute] int id)
         {
-            //получить заказ по id заказа
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                //получить заказ по id заказа
+                if (!ModelState.IsValid)
+                {
+                    Log.WriteSuccess(" OrdersController.GetOrder", "Валидация внутри контроллера неудачна.");
+                    return BadRequest(ModelState);
+                }
+                var order = await _context.Order.SingleOrDefaultAsync(m => m.Id == id);
+                if (order == null)//если ничего не получили -- не найдено
+                {
+                    Log.WriteSuccess(" OrdersController.GetOrder", "ничего не получили.");
+                    return NotFound();
+                }
+                return Ok(order);//возвращием заказ
             }
-            var order = await _context.Order.SingleOrDefaultAsync(m => m.Id == id);
-            if (order == null)//если ничего не получили -- не найдено
+            catch (Exception ex)
             {
-                return NotFound();
+                Log.Write(ex);
+                return BadRequest();
             }
-            return Ok(order);//возвращием заказ
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Order order)
         {//создать новый заказ
-            //получаем данные о заказе во входных параметрах
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
+         //получаем данные о заказе во входных параметрах
+          try  {
+                if (!ModelState.IsValid)
+                {
+                    Log.WriteSuccess(" OrdersController.Create", "Валидация внутри контроллера неудачна.");
+                    return BadRequest(ModelState);
+                }
+                _context.Order.Add(order); //добавление заказа в БД
+                await _context.SaveChangesAsync();//асинхронное сохранение изменений
+                Log.WriteSuccess(" OrdersController.Create", "добавление заказа "+ order.Id + " в БД");
+                return CreatedAtAction("GetOrder", new { id = order.Id }, order);
             }
-            _context.Order.Add(order); //добавление заказа в БД
-            await _context.SaveChangesAsync();//асинхронное сохранение изменений
-            return CreatedAtAction("GetOrder", new { id = order.Id }, order);
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return BadRequest();
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Order order)
         {//обновить существующий заказ
-            if (!ModelState.IsValid)
+
+            try {
+               if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                    Log.WriteSuccess(" OrdersController.Update", "Валидация внутри контроллера неудачна.");
+                    return BadRequest(ModelState);
             }
             var item = _context.Order.Find(id);
             if (item == null)
             {
-                return NotFound();
+                    Log.WriteSuccess(" OrdersController.Update", "Элемент для обновления не найден в БД.");
+                    return NotFound();
             }
             item.BookOrders = order.BookOrders;
             item.DateDelivery = order.DateDelivery;
@@ -91,25 +119,43 @@ namespace BookShop.Controllers
             item.SumOrder = order.SumOrder;
             _context.Order.Update(item);
             await _context.SaveChangesAsync();
-            return NoContent();
+             Log.WriteSuccess(" OrdersController.Update", "обновление заказа " + order.Id + " в БД.");
+             return NoContent();
         }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return BadRequest();
+            }
+}
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "user")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {//удаление заказа
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    Log.WriteSuccess(" OrdersController.Delete", "Валидация внутри контроллера неудачна.");
+                    return BadRequest(ModelState);
+                }
+                var item = _context.Order.Find(id);
+                if (item == null)
+                {
+                    Log.WriteSuccess(" OrdersController.Delete", "Элемент для удаления не найден в БД.");
+                    return NotFound();
+                }
+                _context.Order.Remove(item);
+                await _context.SaveChangesAsync();
+                Log.WriteSuccess(" OrdersController.Delete", "удаление заказа " + id + " в БД.");
+                return NoContent();
             }
-            var item = _context.Order.Find(id);
-            if (item == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                Log.Write(ex);
+                return BadRequest();
             }
-            _context.Order.Remove(item);
-            await _context.SaveChangesAsync();
-            return NoContent();
         }
 
     }

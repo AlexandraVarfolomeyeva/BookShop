@@ -136,6 +136,7 @@ function updateOrder(cost) {
 }
 //==================
 
+
 function getCurrentUser() {
     let request = new XMLHttpRequest();
     request.open("POST", "/api/Account/isAuthenticated", true);

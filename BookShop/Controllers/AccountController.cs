@@ -32,60 +32,74 @@ namespace BookShop.Controllers
         public async Task<IActionResult> Register([ FromBody ]
             RegisterViewModel model)
         {
-            if (ModelState.IsValid)
-            {//добавление нового пользователя при регистрации
-                User user = new User
-                {
-                    Fio = model.Fio,
-                    Email = model.Email,
-                    UserName = model.UserName,
-                    PhoneNumber = model.PhoneNumber,
-                    PhoneNumberConfirmed = true,
-                    Address = model.Address
-                };
-                // Добавление нового пользователя
-                var result = await _userManager.CreateAsync(user,
-                model.Password);
-                if (result.Succeeded)//если успешно
-                {
-                    await _userManager.AddToRoleAsync(user, "user");//роль - пользователь
-                    Order order = new Order() //при регистрации создается новый заказ, актуальность которого =1
+            try
+            {
+                if (ModelState.IsValid)
+                {//добавление нового пользователя при регистрации
+                    User user = new User
                     {
-                        UserId = user.Id,
-                        SumOrder = 0,
-                        SumDelivery = 50,
-                        DateOrder = new DateTime(),
-                        DateDelivery = DateTime.Now,
-                        Active = 1,
-                        User = user
+                        Fio = model.Fio,
+                        Email = model.Email,
+                        UserName = model.UserName,
+                        PhoneNumber = model.PhoneNumber,
+                        PhoneNumberConfirmed = true,
+                        Address = model.Address
                     };
-                    await OrderEvent(order);//асинхронное создание заказа
-                    // установка куки
-                    await _signInManager.SignInAsync(user, false);
-                    var msg = new
+                    // Добавление нового пользователя
+                    var result = await _userManager.CreateAsync(user,
+                    model.Password);
+                    if (result.Succeeded)//если успешно
                     {
-                        message = "Добавлен новый пользователь: " + user.UserName
-                    };
-                    return Ok(msg);
+                        await _userManager.AddToRoleAsync(user, "user");//роль - пользователь
+                        Order order = new Order() //при регистрации создается новый заказ, актуальность которого =1
+                        {
+                            UserId = user.Id,
+                            SumOrder = 0,
+                            SumDelivery = 50,
+                            DateOrder = new DateTime(),
+                            DateDelivery = DateTime.Now,
+                            Active = 1,
+                            User = user
+                        };
+                        await OrderEvent(order);//асинхронное создание заказа
+                                                // установка куки
+                        await _signInManager.SignInAsync(user, false);
+                        var msg = new
+                        {
+                            message = "Добавлен новый пользователь: " + user.UserName
+                        };
+                        return Ok(msg);
+                    }
+                    else
+                    {//вывод ошибок при неудаче
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty,
+                            error.Description);
+                        }
+                        var errorMsg = new
+                        {
+                            message = "Пользователь не добавлен.",
+                            error = ModelState.Values.SelectMany(e =>
+                            e.Errors.Select(er => er.ErrorMessage))
+                        };
+                        return Ok(errorMsg);
+                    }
                 }
                 else
-                {//вывод ошибок при неудаче
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty,
-                        error.Description);
-                    }
+                {//если неверно введены данные
                     var errorMsg = new
                     {
-                        message = "Пользователь не добавлен.",
+                        message = "Неверные входные данные.",
                         error = ModelState.Values.SelectMany(e =>
                         e.Errors.Select(er => er.ErrorMessage))
                     };
                     return Ok(errorMsg);
                 }
             }
-            else
-            {//если неверно введены данные
+            catch (Exception ex)
+            {
+                Log.Write(ex);
                 var errorMsg = new
                 {
                     message = "Неверные входные данные.",
@@ -154,15 +168,18 @@ namespace BookShop.Controllers
             return Ok(msg);
         }
 
-        string id="";
+         string id="";
+        string role;
+        IList<string> x;
         [HttpPost]
         [Route("api/Account/isAuthenticated")]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> LogisAuthenticatedOff()
         {//сообщение об авторизации пользователем
-            User usr = await GetCurrentUserAsync(); //получение текущего пользователя
+            User usr;
+            usr = await GetCurrentUserAsync(); //получение текущего пользователя
+            if (usr != null) id = usr.Id;
             var message = usr == null ? "Вы Гость. Пожалуйста, выполните вход." :  "Вы вошли как: " + usr.UserName;
-            if (usr !=null) id = usr.Id;
             var msg = new
             {
                 message
@@ -171,13 +188,41 @@ namespace BookShop.Controllers
         }
         private Task<User> GetCurrentUserAsync() =>
         _userManager.GetUserAsync(HttpContext.User);
-       
 
+       [Route("api/Account/WhoisAuthenticated")]
         public async Task<string> GetIdUserAsync()
         {//получение id текущего пользователя
-            await LogisAuthenticatedOff();
+            try
+            {
+                await LogisAuthenticatedOff();
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
             return id;
         }
+
+        [Route("api/Account/GetRole")]
+        public async Task<string> GetUserRole()
+        {//получение id текущего пользователя
+
+            try
+            {
+                User usr = await GetCurrentUserAsync();
+                if (usr != null)
+                {
+                    x = await _userManager.GetRolesAsync(usr);
+                    role = x.FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
+            return role;
+        }
+
     }
 
 }

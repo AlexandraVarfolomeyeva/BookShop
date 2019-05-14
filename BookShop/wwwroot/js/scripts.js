@@ -27,12 +27,23 @@ function GetOrder() {//получение id текущего заказа и е
     request2.send();
 }
 
+var Role="";
+function GetRole() {
+    var request = new XMLHttpRequest();
+    request.open("GET", "api/Account/GetRole", false);
+    request.onload = function () {
+        Role = JSON.parse(request.responseText);
+    }
+    request.send();
+}
+
 function loadBooks() { //загрузка книг
     var i, x = "";
     var k = 0;//счетчик количество книг в строке
     var request = new XMLHttpRequest();
     request.open("GET", uri, false);
     request.onload = function () {
+        GetRole();
         items = JSON.parse(request.responseText);
         x += "<div class=\"row\">";//начинаем строку
         for (i in items) {
@@ -51,7 +62,10 @@ function loadBooks() { //загрузка книг
             x += "<h6> Издательство: " + items[i].publisher + "</h6>";
             x += "<h5> Цена: " + items[i].cost + "</h5>";
             x += "<button onclick=\"add(" + items[i].id + "," + items[i].cost + ");\" class=\"btn btn-dark\"> Купить </button> <br/>";
-            x += "<button onclick=\"deleteBook(" + items[i].id + ");\" class=\"btn btn-dark\"> Удалить </button> </div >";
+            if (Role === "admin") {
+                x += "<button onclick=\"deleteBook(" + items[i].id + ");\" class=\"btn btn-dark\"> Удалить </button>";
+            }
+            x += "</div >";
             k = k + 1;
         }
         while (k !== 3) { //если в последней строке оказалось меньше книг, чем 3
@@ -61,9 +75,10 @@ function loadBooks() { //загрузка книг
             k = k + 1;
         }
         x += "</div>";
-        document.getElementById("ContainerDiv").innerHTML = x;//выводим в документ код html
+        document.getElementById("ContainerDiv").innerHTML = x;//выводим в документ код html    
+        loadBasket(); 
     };
-    loadBasket(); 
+
     request.send();
 }
 
