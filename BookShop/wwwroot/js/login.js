@@ -1,10 +1,8 @@
 ﻿// Обработка клика по кнопке регистрации
-document.querySelector("#loginBtn").addEventListener("click",
-    logIn);
+document.querySelector("#loginBtn").addEventListener("click", function () {
+    logIn(); getUser();});
 document.querySelector("#logoffBtn").addEventListener("click",
     logOff);
-
-var isauto = 0;
 
 function logIn() {
     var user, password = "";
@@ -48,8 +46,6 @@ function logIn() {
         rememberMe: remember
     }));
     // вывести результат
-   if (isauto == 1) window.location.href = "index.html";
-
 }
 function logOff() {
     var request = new XMLHttpRequest();
@@ -66,7 +62,6 @@ function logOff() {
     request.setRequestHeader("Content-Type",
         "application/json;charset=UTF-8");
     request.send();
-    isauto = 0;
 }
 
 function getCurrentUser() {
@@ -77,6 +72,18 @@ function getCurrentUser() {
         myObj = request.responseText !== "" ?
             JSON.parse(request.responseText) : {};
         document.getElementById("msg").innerHTML = myObj.message;
+    };
+    request.send();
+}
+
+function getUser() {
+    let request = new XMLHttpRequest();
+    request.open("POST", "/api/Account/WhoisAuthenticated", true);
+    request.onload = function () {
+        if (request.status === 200) {
+            alert("Вы успешно вошли!");
+            window.location.href = "index.html";
+        }
     };
     request.send();
 }
