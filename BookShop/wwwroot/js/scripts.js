@@ -1,26 +1,11 @@
-﻿document.addEventListener("DOMContentLoaded", function (event) {
-    program.load();
-});
-
-var program = new function() {
-
-};
-
-var Gets = new function() {
-    this.uri = "/api/Books/";
-    this.uri1 = "/api/BookOrder/";
-    this.uri2 = "/api/Orders/";
-    this.items = null;
-    this.books = null;
-    this.orders = null;
-    this.order;
-
-
-
-
-};
-
-
+﻿const uri = "/api/Books/";
+const uri1 = "/api/BookOrder/";
+const uri2 = "/api/Orders/";
+let items = null;
+let books = null;
+let orders = null;
+var order;
+ //getCurrentUser(); GetOrder();loadBooks();
 
 function GetOrder() {//получение id текущего заказа и его отображение
     var request2 = new XMLHttpRequest();
