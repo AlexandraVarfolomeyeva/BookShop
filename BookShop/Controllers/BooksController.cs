@@ -25,53 +25,78 @@ namespace BookShop.Controllers
         [HttpGet]
         public IEnumerable<Book> GetAll() //получение списка всех книг
         {
-            return _context.Book.Include(p=>p.BookOrders);
+            try {
+                return _context.Book.Include(p=>p.BookOrders);
+            } catch (Exception ex)
+            {
+                Log.Write(ex);
+                return null;
+            }
+            
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBook([FromRoute] int id)
         {//получение книги по id
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    Log.WriteSuccess(" BooksController.GetBook", "Валидация внутри контроллера неудачна.");
+                    return BadRequest(ModelState);
+                }
+
+                var item = await _context.Book.SingleOrDefaultAsync(m => m.Id == id);
+
+                if (item == null)
+                {
+                    Log.WriteSuccess(" BooksController.GetBook", "Книга не найдена.");
+                    return NotFound();
+                }
+                return Ok(item);
+            } catch(Exception ex)
+            {
+                Log.Write(ex);
                 return BadRequest(ModelState);
             }
-
-            var item = await _context.Book.SingleOrDefaultAsync(m => m.Id == id);
-
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(item);
         }
 
         [HttpPost]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create([FromBody] Book item)
         {//создание новой книги возможно только администратором
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    Log.WriteSuccess(" BooksController.Create", "Валидация внутри контроллера неудачна.");
+                    return BadRequest(ModelState);
+                }
+
+                _context.Book.Add(item);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetBook", new { id = item.Id }, item);
+            } catch (Exception ex)
+            {
+                Log.Write(ex);
                 return BadRequest(ModelState);
             }
-
-            _context.Book.Add(item);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetBook", new { id = item.Id }, item);
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Book book)
         {//обновление информации о существующей книге возможно только администратором
-            if (!ModelState.IsValid)
+          try{  if (!ModelState.IsValid)
             {
+                Log.WriteSuccess(" BooksController.Update", "Валидация внутри контроллера неудачна.");
                 return BadRequest(ModelState);
             }
             var item = _context.Book.Find(id);
             if (item == null)
             {
+                Log.WriteSuccess(" BooksController.Update", "Книга не найдена.");
                 return NotFound();
             }
             item.BookOrders = book.BookOrders;
@@ -85,24 +110,38 @@ namespace BookShop.Controllers
             _context.Book.Update(item);
             await _context.SaveChangesAsync();
             return NoContent();
+        } catch (Exception ex)
+            {
+                Log.Write(ex);
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {//удаление книги из БД возможно только администратором
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    Log.WriteSuccess(" BooksController.Delete", "Валидация внутри контроллера неудачна.");
+                    return BadRequest(ModelState);
+                }
+                var item = _context.Book.Find(id);
+                if (item == null)
+                {
+                    Log.WriteSuccess(" BooksController.Delete", "Книга не найдена.");
+                    return NotFound();
+                }
+                _context.Book.Remove(item);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            } catch (Exception ex)
+            {
+                Log.Write(ex);
                 return BadRequest(ModelState);
             }
-            var item = _context.Book.Find(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            _context.Book.Remove(item);
-            await _context.SaveChangesAsync();
-            return NoContent();
         }
     }
 }

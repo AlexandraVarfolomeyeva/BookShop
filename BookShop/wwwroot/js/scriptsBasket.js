@@ -66,10 +66,41 @@ function loadBooks(){//загрузить книги
 
 function MakeOrder() {//Active=0, создать новый текущий заказ для этого пользователя
     var request = new XMLHttpRequest();
-    var url = uri1 + id;
+    var url = uri2 + order; //получить текущий заказ
     request.open("GET", url, false);
     request.onload = function () {
-        GetOrder();
+        if (request.status === 200) {
+            var CurOrder = JSON.parse(request.responseText); //получение текущего заказа
+          CurOrder.active = 0;
+            var d = new Date();
+            CurOrder.dateOrder = "" + String(d.getFullYear()) + "-" + String(d.getMonth()).padStart(2, '0') + "-" + String(d.getDate()).padStart(2, '0');
+            var request2 = new XMLHttpRequest();
+            request2.open("PUT", url, false);
+            request2.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            request2.onload = function () {
+                var request1 = new XMLHttpRequest();
+                request1.open("POST", "/api/Orders/", false);
+                request1.setRequestHeader("Accepts",
+                    "application/json;charset=UTF-8");
+                request1.setRequestHeader("Content-Type",
+                    "application/json;charset=UTF-8");
+                request1.onload = function () {
+                     GetOrder();  
+                };
+                request1.send(JSON.stringify({
+                    
+                    dateDelivery: "0001-01-01",
+                    dateOrder: "0001-01-01",
+                    sumDelivery: 50,
+                    sumOrder: 0,
+                    active: 1,
+                    userId: "1"
+                }));
+
+            };
+            request2.send(JSON.stringify(CurOrder));
+        }
+
     };
     request.send();
 }

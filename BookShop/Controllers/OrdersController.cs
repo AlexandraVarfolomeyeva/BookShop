@@ -34,7 +34,7 @@ namespace BookShop.Controllers
                 if (id !="")
                 Log.WriteSuccess(" OrdersController.GetAll", "возвращаем список всех заказов для текущего пользователя.");
                 else
-                    Log.WriteSuccess(" OrdersController.GetAll", "Пользователь не орпределен.");
+                    Log.WriteSuccess(" OrdersController.GetAll", "Пользователь не определен.");
                 return _context.Order.Include(p => p.BookOrders).Where(p => p.UserId == id);
             
             } catch (Exception ex)
@@ -78,12 +78,19 @@ namespace BookShop.Controllers
         public async Task<IActionResult> Create([FromBody] Order order)
         {//создать новый заказ
          //получаем данные о заказе во входных параметрах
-          try  {
+            try
+            {
                 if (!ModelState.IsValid)
                 {
                     Log.WriteSuccess(" OrdersController.Create", "Валидация внутри контроллера неудачна.");
                     return BadRequest(ModelState);
                 }
+                Log.WriteSuccess(" OrdersController.Create", "Данные валидны.");
+                if (order.UserId == "1")
+                    order.UserId = IDEvent().Result;
+                Log.WriteSuccess(" OrdersController.Create", "Id user"+ order.UserId);
+                order.DateDelivery = DateTime.Now;
+                order.DateDelivery = order.DateDelivery.AddMonths(1);
                 _context.Order.Add(order); //добавление заказа в БД
                 await _context.SaveChangesAsync();//асинхронное сохранение изменений
                 Log.WriteSuccess(" OrdersController.Create", "добавление заказа "+ order.Id + " в БД");
@@ -99,7 +106,6 @@ namespace BookShop.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Order order)
         {//обновить существующий заказ
-
             try {
                if (!ModelState.IsValid)
             {
@@ -117,6 +123,7 @@ namespace BookShop.Controllers
             item.DateOrder = order.DateOrder;
             item.SumDelivery = order.SumDelivery;
             item.SumOrder = order.SumOrder;
+                item.Active = order.Active;
             _context.Order.Update(item);
             await _context.SaveChangesAsync();
              Log.WriteSuccess(" OrdersController.Update", "обновление заказа " + order.Id + " в БД.");

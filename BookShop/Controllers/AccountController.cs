@@ -16,7 +16,7 @@ namespace BookShop.Controllers
     [Produces("application/json")]
     public class AccountController : Controller
     {
-        public static event OrderDelegate OrderEvent;
+        public static event OrderDelegate OrderEvent; //событие создания заказа
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         public AccountController(UserManager<User> userManager,
@@ -48,26 +48,17 @@ namespace BookShop.Controllers
                     // Добавление нового пользователя
                     var result = await _userManager.CreateAsync(user,
                     model.Password);
+                    await _signInManager.SignInAsync(user, false);// установка куки
                     if (result.Succeeded)//если успешно
                     {
+                        Log.WriteSuccess("AccountController.Register", "Пользователь добавлен и вошел в систему.");
                         await _userManager.AddToRoleAsync(user, "user");//роль - пользователь
-                        Order order = new Order() //при регистрации создается новый заказ, актуальность которого =1
-                        {
-                            UserId = user.Id,
-                            SumOrder = 0,
-                            SumDelivery = 50,
-                            DateOrder = new DateTime(),
-                            DateDelivery = DateTime.Now,
-                            Active = 1,
-                            User = user
-                        };
-                        await OrderEvent(order);//асинхронное создание заказа
-                                                // установка куки
-                        await _signInManager.SignInAsync(user, false);
+                        
                         var msg = new
                         {
                             message = "Добавлен новый пользователь: " + user.UserName
                         };
+                        await CreateFirstOrder(user.Id);
                         return Ok(msg);
                     }
                     else
@@ -77,9 +68,10 @@ namespace BookShop.Controllers
                             ModelState.AddModelError(string.Empty,
                             error.Description);
                         }
+                        Log.WriteSuccess("AccountController.Register", "Пользователь не добавлен.");
                         var errorMsg = new
                         {
-                            message = "Пользователь не добавлен.",
+                        message = "Пользователь не добавлен.",
                             error = ModelState.Values.SelectMany(e =>
                             e.Errors.Select(er => er.ErrorMessage))
                         };
@@ -88,6 +80,7 @@ namespace BookShop.Controllers
                 }
                 else
                 {//если неверно введены данные
+                    Log.WriteSuccess("AccountController.Register", "Неверные входные данные.");
                     var errorMsg = new
                     {
                         message = "Неверные входные данные.",
@@ -123,6 +116,7 @@ namespace BookShop.Controllers
                 model.RememberMe, false);
                 if (result.Succeeded)//если успешно
                 {
+                    Log.WriteSuccess("AccountController.Login", "Выполнен вход пользователем: " + model.User);
                     var msg = new
                     {
                         message = "Выполнен вход пользователем: " +
@@ -133,6 +127,7 @@ namespace BookShop.Controllers
                 else
                 {//если неудачно
                     ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+                    Log.WriteSuccess("AccountController.Login", "Неправильный логин и (или) пароль.");
                     var errorMsg = new
                     {
                         message = "Вход не выполнен.",
@@ -144,6 +139,7 @@ namespace BookShop.Controllers
             }
             else
             {
+                Log.WriteSuccess("AccountController.Login", "Вход не выполнен.");
                 var errorMsg = new
                 {
                     message = "Вход не выполнен.",
@@ -160,6 +156,7 @@ namespace BookShop.Controllers
         {//выход из системы
             // Удаление куки
             await _signInManager.SignOutAsync();
+            Log.WriteSuccess("AccountController.LogOff", "Выполнен выход.");
             var msg = new
             {
 
@@ -184,12 +181,15 @@ namespace BookShop.Controllers
             {
                 message
             };
+           
             return Ok(msg);
         }
         private Task<User> GetCurrentUserAsync() =>
         _userManager.GetUserAsync(HttpContext.User);
 
-       [Route("api/Account/WhoisAuthenticated")]
+
+        [HttpGet]
+        [Route("api/Account/WhoisAuthenticated")]
         public async Task<string> GetIdUserAsync()
         {//получение id текущего пользователя
             try
@@ -203,6 +203,7 @@ namespace BookShop.Controllers
             return id;
         }
 
+        [HttpGet]
         [Route("api/Account/GetRole")]
         public async Task<string> GetUserRole()
         {//получение id текущего пользователя
@@ -221,6 +222,24 @@ namespace BookShop.Controllers
                 Log.Write(ex);
             }
             return role;
+        }
+
+        [HttpGet]
+        [Route("api/Account/CreateFirstOrder")]
+        public async Task<Order> CreateFirstOrder(string id)
+        {
+            await GetIdUserAsync();
+            Order order = new Order() //при регистрации создается новый заказ, актуальность которого =1
+            {
+                DateDelivery = DateTime.Now,
+                DateOrder = new DateTime(),
+                SumOrder = 0,
+                SumDelivery = 50,
+                Active = 1,
+                UserId = id
+            };
+            await OrderEvent(order);//асинхронное создание заказа
+            return order;
         }
 
     }

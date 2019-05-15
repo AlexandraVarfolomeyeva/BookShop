@@ -27,25 +27,39 @@ namespace BookShop.Controllers
         [HttpGet]
         public IEnumerable<BookOrder> GetAll()
         {//получение всех строк заказа
-            return _context.BookOrder;
+            try {  return _context.BookOrder;} catch (Exception ex)
+            {
+                Log.Write(ex);
+                return null;
+            }
+           
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBookOrder([FromRoute] int id)
         {//получение конкретной строки заказа по id
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    Log.WriteSuccess(" BookOrderController.GetBookOrder", "Валидация внутри контроллера неудачна.");
+                    return BadRequest(ModelState);
+                }
+
+                var item = await _context.BookOrder.SingleOrDefaultAsync(m => m.Id == id);
+
+                if (item == null)
+                {
+                    Log.WriteSuccess("BookOrderController.GetBookOrder", "Элемент BookOrder не найден.");
+                    return NotFound();
+                }
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
                 return BadRequest(ModelState);
             }
-
-            var item = await _context.BookOrder.SingleOrDefaultAsync(m => m.Id == id);
-
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(item);
         }
 
 
@@ -53,34 +67,53 @@ namespace BookShop.Controllers
         [Authorize(Roles = "user")]
         public async Task<IActionResult> Create([FromBody] BookOrder item)
         {//создание новой строки заказа
-          //  string id = IDEvent().Result;//получили id пользователя
-            if (!ModelState.IsValid)
+         //  string id = IDEvent().Result;//получили id пользователя
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    Log.WriteSuccess("BookOrderController.Create", "Валидация внутри контроллера неудачна.");
+                    return BadRequest(ModelState);
+                }
+
+                _context.BookOrder.Add(item);
+                await _context.SaveChangesAsync();
+                Log.WriteSuccess("BookOrderController.Create", "Добавлена новая строка заказа.");
+                return CreatedAtAction("GetBookOrder", new { id = item.Id }, item);
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
                 return BadRequest(ModelState);
             }
-            
-            _context.BookOrder.Add(item);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetBookOrder", new { id = item.Id }, item);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "user")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {//удаление существующей строки заказа
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    Log.WriteSuccess("BookOrderController.Delete", "Валидация внутри контроллера неудачна.");
+                    return BadRequest(ModelState);
+                }
+                var item = _context.BookOrder.Find(id);
+                if (item == null)
+                {
+                    Log.WriteSuccess("BookOrderController.Delete", "Элемент не найден.");
+                    return NotFound();
+                }
+                _context.BookOrder.Remove(item);
+                await _context.SaveChangesAsync();
+                Log.WriteSuccess("BookOrderController.Delete", "Элемент удален.");
+                return NoContent();
+            } catch (Exception ex)
+            {
+                Log.Write(ex);
                 return BadRequest(ModelState);
             }
-            var item = _context.BookOrder.Find(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            _context.BookOrder.Remove(item);
-            await _context.SaveChangesAsync();
-            return NoContent();
         }
     }
 }
