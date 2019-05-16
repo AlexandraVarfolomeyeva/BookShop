@@ -58,7 +58,7 @@ namespace BookShop.Controllers
                         {
                             message = "Добавлен новый пользователь: " + user.UserName
                         };
-                        await CreateFirstOrder(user.Id);
+                       // await CreateFirstOrder(user.Id);
                         return Ok(msg);
                     }
                     else

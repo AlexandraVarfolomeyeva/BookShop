@@ -20,12 +20,39 @@ function GetOrder() {//получение id текущего заказа и е
                     order = orders[j].id;
                 }
             }
+            if (!order) {
+                CreateFirstOrder();
+                GetOrder();
+            }
             //если список заказов получить не удалось
         } else if (request2.status !== 204) {
             alert("Возникла неизвестная ошибка! Попробуйте повторить позже! Статус ошибки: " + request2.status);
         }
     };
     request2.send();
+}
+
+function CreateFirstOrder() {
+    var request1 = new XMLHttpRequest();
+    request1.open("POST", "/api/Orders/", false);
+    request1.setRequestHeader("Accepts",
+        "application/json;charset=UTF-8");
+    request1.setRequestHeader("Content-Type",
+        "application/json;charset=UTF-8");
+    request1.onload = function () {
+        // 
+        if (request1.status !== 201) 
+         alert("Возникла ошибка при добавлении заказа, пожалуйста, нажмите на кнопку.");
+    };
+    request1.send(JSON.stringify({
+
+        dateDelivery: "0001-01-01",
+        dateOrder: "0001-01-01",
+        sumDelivery: 50,
+        sumOrder: 0,
+        active: 1,
+        userId: "1"
+    }));
 }
 
 var Role="";

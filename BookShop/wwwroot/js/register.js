@@ -9,30 +9,12 @@ document.addEventListener("DOMContentLoaded", function () {
             event.stopPropagation()
         }
         else {
-         var promise = new Promise(function(resolve, reject) {
-                                      // Эта функция будет вызвана автоматически
+        
+             logOff();
+             Register();
+             
 
-                                      // В ней можно делать любые асинхронные операции,
-                                      // А когда они завершатся — нужно вызвать одно из:
-                                      // resolve(результат) при успешном выполнении
-                                      // reject(ошибка) при ошибке
-            logOff();
-            Register();
-            })
-
-            // promise.then навешивает обработчики на успешный результат или ошибку
-            promise
-                .then(
-                    result => {
-                        // первая функция-обработчик - запустится при вызове resolve
-                        getCurrentUser();
-                        CreateFirstOrder();
-                    },
-                    error => {
-                        // вторая функция - запустится при вызове reject
-                        alert("Rejected: " + error); // error - аргумент reject
-                    }
-                );
+          
             
            
         }
@@ -86,6 +68,7 @@ function ParseResponse(e) {
     let response = JSON.parse(e.responseText);
     document.querySelector("#msg").innerHTML = response.message;
     alert(response.message);
+    getCurrentUser();
     // Вывод сообщений об ошибках
     if (response.error.length > 0) {
         for (var i = 0; i < response.error.length; i++) {
@@ -119,43 +102,14 @@ function getCurrentUser() {
         if (request.status === 200) {
             myObj = JSON.parse(request.responseText);
             ////если удалось получить текущего пользователя, выводим alert и перенаправляем на главную
-            alert("Пользователь успешно зарегистрирован!");
-          //  CreateFirstOrder();
-            //создаем для него новый заказ
-         
-            ////создаем заказ для этого пользователя
-            //var request1 = new XMLHttpRequest();
-            //request1.open("POST", "/api/Orders/", false);
-            //request1.setRequestHeader("Accepts",
-            //    "application/json;charset=UTF-8");
-            //request1.setRequestHeader("Content-Type",
-            //    "application/json;charset=UTF-8");
-            //request1.onload = function () {
-            //    
-            //};
-            //request1.send(JSON.stringify({
-            //    dateDelivery: "0001-01-01",
-            //    dateOrder: "0001-01-01",
-            //    sumDelivery: 50,
-            //    sumOrder: 0,
-            //    active: 1,
-            //    userId: "1"
-            //}));
+          //  alert("Пользователь успешно зарегистрирован!");
+            window.location.href = "index.html";
 
         }
     };
     request.send();
 }
 
-function CreateFirstOrder() {
-    let request = new XMLHttpRequest();
-    request.open("GET", "/api/Account/CreateFirstOrder", true);
-    request.onload = function () {
-        if (request.status === 200) {
-            window.location.href = "index.html";
-        }
-    };
-    request.send(myObj);
-}
+
 
 
