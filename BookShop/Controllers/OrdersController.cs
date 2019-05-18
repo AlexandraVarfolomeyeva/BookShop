@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookShop.BLL;
 using BookShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ namespace BookShop.Controllers
         }
         public static event IdDelegate IDEvent; //событие по получению id текущего пользователя из AccountController
 
-
+        
         [HttpGet]
        public IEnumerable<Order> GetAll() //получить все заказы
         {
@@ -127,6 +128,7 @@ namespace BookShop.Controllers
             _context.Order.Update(item);
             await _context.SaveChangesAsync();
              Log.WriteSuccess(" OrdersController.Update", "обновление заказа " + order.Id + " в БД.");
+                GetDiscount();
              return NoContent();
         }
             catch (Exception ex)
@@ -137,6 +139,7 @@ namespace BookShop.Controllers
 }
 
         [HttpDelete("{id}")]
+     
         [Authorize(Roles = "user")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {//удаление заказа
@@ -165,5 +168,13 @@ namespace BookShop.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("api/Orders/GetDiscount")]
+        public IEnumerable<Order> GetDiscount()
+        {
+            BuyService b = new BuyService(10);
+            IEnumerable<Order> g = GetAll();
+            return b.GetDiscount(g, 1);
+        }
     }
 }

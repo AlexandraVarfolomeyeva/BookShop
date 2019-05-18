@@ -97,7 +97,7 @@ function MakeOrder() {//Active=0, создать новый текущий за�
                     request1.setRequestHeader("Content-Type",
                         "application/json;charset=UTF-8");
                     request1.onload = function () {
-                        GetOrder();
+                            GetOrder();     
                     };
                     request1.send(JSON.stringify({
 
