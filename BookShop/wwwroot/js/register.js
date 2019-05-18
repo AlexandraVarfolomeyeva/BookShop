@@ -9,14 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
             event.stopPropagation()
         }
         else {
-        
              logOff();
-             Register();
-             
-
-          
-            
-           
+             Register();         
         }
         elForm.classList.add('was-validated')
     });

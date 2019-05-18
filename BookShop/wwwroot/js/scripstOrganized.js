@@ -6,44 +6,44 @@ let orders = null;
 var order;
 //getCurrentUser(); GetOrder();loadBooks();
 
-var program = new function () {
+var program =  {
    
   //  gets.getCurrentUser();
-    gets.GetOrder();
-    load.loadBooks();
-    load.loadBasket();
+    gets.GetOrder(),
+    load.loadBooks(),
+    load.loadBasket(),
 };
 
-var gets = new function () {
-    this.Role = "";
-    this.order; //id текущего заказа
-    this.orders; //список всех заказов пользователя
-    this.uriRole = "api/Account/GetRole";
-    this.uriOrders = "/api/Orders/";//контроллер заказов пользователя
-    this.uriBooks = "/api/Books/";
-    this.uriBO = "/api/BookOrder/";
+var gets =  {
+    Role : "",
+    order, //id текущего заказа
+    orders, //список всех заказов пользователя
+    uriRole : "api/Account/GetRole",
+    uriOrders : "/api/Orders/",//контроллер заказов пользователя
+    uriBooks : "/api/Books/",
+    uriBO : "/api/BookOrder/",
 
-    this.request_get = new function (url) {
+    request_get : function (url) {
         var request = new XMLHttpRequest();
         request.open("GET", url, false);
         request.onload = function () {
             return JSON.parse(request.responseText);
         };
         request.send();
-    };
+    },
 
-    this.getRole = new function () {
-        Role =   this.request_get(this.uriRole);
-    };
+    getRole : function () {
+        Role =  request_get(uriRole);
+    },
 
-    this.GetOrder = new function () {
-        this.orders = this.request_get(this.uriOrders);
-        for (j in this.orders) {//в цикле ищем заказ пользователя, который является активным
-            if (this.orders[j].active === 1) {
-                this.order = this.orders[j].id;
+    GetOrder : function () {
+        torders = request_get(uriOrders);
+        for (j in orders) {//в цикле ищем заказ пользователя, который является активным
+            if (orders[j].active === 1) {
+                order = orders[j].id;
             }
         }
-    };
+    }
 };
 
 var load = new function () {

@@ -4,45 +4,58 @@ const uri2 = "/api/Orders/";
 let items = null;
 let books = null;
 let orders = null;
-var order;
+var order=0;
  //getCurrentUser(); GetOrder();loadBooks();
 
 function GetOrder() {//получение id текущего заказа и его отображение
-    var request2 = new XMLHttpRequest();
-    request2.open("GET", uri2, false);
-    orders = null;
-    request2.onload = function () {
-        if (request2.status === 200) { //если мы получили список заказов
-            orders = JSON.parse(request2.responseText);
+    GetRole();
+   getIdUser();
+    if (Role === "user") {
+       var request2 = new XMLHttpRequest();
+        request2.open("GET", uri2, false);
+        orders = null;
+        request2.onload = function () {
+            if (request2.status === 200) { //если мы получили список заказов
+                orders = JSON.parse(request2.responseText);
 
-            for (j in orders) {//в цикле ищем заказ пользователя, который является активным
-                if (orders[j].active === 1) {
-                    order = orders[j].id;
-                }
+                for (j in orders) {//в цикле ищем заказ пользователя, который является активным
+                    if (orders[j].active === 1) {
+                        order = orders[j].id;
+                    }
+                }          //если список заказов получить не удалось
+            } else if (request2.status !== 204) {
+                alert("Возникла неизвестная ошибка! Попробуйте повторить позже! Статус ошибки: " + request2.status);
             }
-            if (!order) {
-                CreateFirstOrder();
-                GetOrder();
-            }
-            //если список заказов получить не удалось
-        } else if (request2.status !== 204) {
-            alert("Возникла неизвестная ошибка! Попробуйте повторить позже! Статус ошибки: " + request2.status);
+        };
+        request2.send();
+    }
+}
+var myObj="";
+function getIdUser() {
+    let request = new XMLHttpRequest();
+    request.open("GET", "/api/Account/WhoisAuthenticated", true);
+    request.onload = function () {
+        if (request.status === 200) {
+            myObj = JSON.parse(request.responseText);
         }
     };
-    request2.send();
+    request.send();
 }
 
+
 function CreateFirstOrder() {
-    var request1 = new XMLHttpRequest();
+    if (order === 0) {
+        var request1 = new XMLHttpRequest();
     request1.open("POST", "/api/Orders/", false);
     request1.setRequestHeader("Accepts",
         "application/json;charset=UTF-8");
     request1.setRequestHeader("Content-Type",
         "application/json;charset=UTF-8");
     request1.onload = function () {
-        // 
-        if (request1.status !== 201) 
-         alert("Возникла ошибка при добавлении заказа, пожалуйста, нажмите на кнопку.");
+       
+            
+            GetOrder();
+       
     };
     request1.send(JSON.stringify({
 
@@ -52,7 +65,8 @@ function CreateFirstOrder() {
         sumOrder: 0,
         active: 1,
         userId: "1"
-    }));
+        }));
+    } 
 }
 
 var Role="";
@@ -71,7 +85,6 @@ function loadBooks() { //загрузка книг
     var request = new XMLHttpRequest();
     request.open("GET", uri, false);
     request.onload = function () {
-        GetRole();
         items = JSON.parse(request.responseText);
         x += "<div class=\"row\">";//начинаем строку
         for (i in items) {

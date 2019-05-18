@@ -1,6 +1,6 @@
 ﻿// Обработка клика по кнопке регистрации
-document.querySelector("#loginBtn").addEventListener("click", function () {
-    logIn(); getUser();});
+document.querySelector("#loginBtn").addEventListener("click", 
+    logIn);
 document.querySelector("#logoffBtn").addEventListener("click",
     logOff);
 
@@ -38,6 +38,7 @@ function logIn() {
             }
             document.getElementById("Password").value = "";
         }
+        getUser();
     };
     // Запрос на сервер
     request.send(JSON.stringify({
@@ -58,6 +59,7 @@ function logOff() {
             mydiv.removeChild(mydiv.firstChild);
         }
         document.getElementById("msg").innerHTML = msg.message;
+       
     };
     request.setRequestHeader("Content-Type",
         "application/json;charset=UTF-8");
@@ -78,10 +80,10 @@ function getCurrentUser() {
 
 function getUser() {
     let request = new XMLHttpRequest();
-    request.open("POST", "/api/Account/WhoisAuthenticated", true);
+    request.open("GET", "/api/Account/WhoisAuthenticated", true);
     request.onload = function () {
         if (request.status === 200) {
-            alert("Вы успешно вошли!");
+         //   alert("Вы успешно вошли!");
             window.location.href = "index.html";
         }
     };

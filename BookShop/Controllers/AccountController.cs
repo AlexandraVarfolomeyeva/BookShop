@@ -165,9 +165,9 @@ namespace BookShop.Controllers
             return Ok(msg);
         }
 
-         string id="";
-        string role;
-        IList<string> x;
+        public string id="";
+        public string role;
+        public IList<string> x;
         [HttpPost]
         [Route("api/Account/isAuthenticated")]
         //[ValidateAntiForgeryToken]
@@ -194,7 +194,9 @@ namespace BookShop.Controllers
         {//получение id текущего пользователя
             try
             {
-                await LogisAuthenticatedOff();
+              User usr = await _userManager.GetUserAsync(HttpContext.User);
+              if (usr!=null)  id = usr.Id;
+              //await LogisAuthenticatedOff();
             }
             catch (Exception ex)
             {
