@@ -174,7 +174,7 @@ namespace BookShop.Controllers
         {
             BuyService b = new BuyService(10);
             IEnumerable<Order> g = GetAll();
-            return b.GetDiscount(g, 1);
+            return b.GetDiscount(g, 0);
         }
     }
 }

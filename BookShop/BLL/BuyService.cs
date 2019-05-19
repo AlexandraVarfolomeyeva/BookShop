@@ -15,7 +15,7 @@ namespace BookShop.BLL
         }
         public IEnumerable<Order> GetDiscount (IEnumerable<Order> orders, int i)
         {
-            orders.ToList()[i].SumOrder = orders.ToList()[i].SumOrder * discount / 100;
+            orders.ToList()[i].SumOrder = orders.ToList()[i].SumOrder * (100 - discount) / 100;
             return orders;
         }
     }
