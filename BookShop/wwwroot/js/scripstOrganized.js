@@ -92,7 +92,7 @@ var load = {
             x += "<h6> Автор: " + books[i].author + "</h6>";
             x += "<h6> Издательство: " + books[i].publisher + "</h6>";
             x += "<h5> Цена: " + books[i].cost + "</h5>";
-            x += "<button onclick=\"add(" + books[i].id + "," + books[i].cost + ");\" class=\"btn btn-dark\"> Купить </button> <br/>";
+            x += "<button onclick=\"load.add(" + books[i].id + "," + books[i].cost + ");\" class=\"btn btn-dark\"> Купить </button> <br/>";
             if (gets.Role === "admin") {
                 x += "<button onclick=\"deleteBook(" + books[i].id + ");\" class=\"btn btn-dark\"> Удалить </button>";
             }
@@ -161,7 +161,7 @@ var load = {
         //добавляем новое поле в промежуточную таблицу
         var bookOrder = {
             'IdBook': id,
-            'IdOrder': order
+            'IdOrder': gets.order
         }
         var request = new XMLHttpRequest();
         request.open("POST", gets.uriBO);
@@ -183,7 +183,7 @@ var load = {
                     var request2 = new XMLHttpRequest();
                     request2.open("PUT", uri3);
                     request2.onload = function () {
-                        loadBasket();//загрузка корзины для обновления данных о заказе
+                        load.loadBasket();//загрузка корзины для обновления данных о заказе
                     };
                     request2.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                     request2.send(JSON.stringify(item));
