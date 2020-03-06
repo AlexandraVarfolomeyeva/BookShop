@@ -32,7 +32,8 @@ function GetOrder() {//получение id текущего заказа и е
         }
     } catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
 }
-var myObj="";
+var myObj = "";
+
 function getIdUser() {
     try {
         let request = new XMLHttpRequest();
@@ -115,7 +116,8 @@ function loadBooks() { //загрузка книг
                 x += "<h5> Цена: " + items[i].cost + "</h5>";
                 x += "<button onclick=\"add(" + items[i].id + "," + items[i].cost + ");\" class=\"btn btn-dark\"> Купить </button> <br/>";
                 if (Role === "admin") {
-                    x += "<button onclick=\"deleteBook(" + items[i].id + ");\" class=\"btn btn-dark\"> Удалить </button>";
+                    x += "<button onclick=\"editBook(" + items[i].id + ");\" class=\"btn btn-dark\"> Редактировать </button>";
+                    x += "<button onclick=\"deleteBook(" + items[i].id + ");\" class=\"btn btn-dark\"> Удалить </button>";                    
                 }
                 x += "</div >";
                 k = k + 1;
@@ -137,7 +139,12 @@ function loadBooks() { //загрузка книг
 
 function loadBasket() { //загружаем корзину, в которой отображается количество книг и сумма текущего заказа
     try {
-        var i, x = "";
+        var i, x = "<div class=\"jumbotron p-4 p-md-5 text-white rounded bg-dark\">" +
+          "  <a class=\"h3 display-5 text-white align-items-center\" href=\"Basket.html\">Корзина</a>" +
+           " <div class=\"msgClass\">"+
+              "  <div id=\"msgAuth\"></div>"+
+                "<div id=\"msg\"></div>"+
+                "<ul id=\"formError\"></ul>";
         items = null;
         var k = 0; //счетчик количества книг в заказе
         if (order) { //если текущий заказ определен
@@ -146,6 +153,8 @@ function loadBasket() { //загружаем корзину, в которой �
             request.onload = function () {
                 if (request.status === 200) {
                     items = JSON.parse(request.responseText);
+            
+            
                     x += "<br />";
                     for (i in items) {
                         if (items[i].idOrder === order) {
@@ -168,6 +177,7 @@ function loadBasket() { //загружаем корзину, в которой �
                 if (request2.status === 200) {
                     orderCurrent = JSON.parse(request2.responseText);
                     x += "<label class=\"lead text-small\"> Сумма: " + orderCurrent.sumOrder + "</label >";
+                    x += "</div ></div>";
                     document.getElementById("BasketDiv").innerHTML = x;
                 } else {
                     alert("Возникла ошибка, попробуйте обновить.");
@@ -248,7 +258,6 @@ function deleteBook(id){//удаление книги -- метод, досту�
         request.onload = function () {
             // Обработка кода ответа
             var msg = "";
-            //   alert(request.status);
             if (request.status === 401) {
                 msg = "У вас не хватает прав для удаления";
             } else if (request.status === 204) {
@@ -260,6 +269,32 @@ function deleteBook(id){//удаление книги -- метод, досту�
             document.querySelector("#actionMsg").innerHTML = msg;
         };
         request.send();
+    }
+    catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
+}
+function editBook(id) {//удаление книги -- метод, доступный только администратору
+    try {
+        //вывести модальное окно, где записи будут редактироваться
+        //по нажатию кнопки сохр. отпр. запрос.
+        alert('edit ' + id);
+        //var request = new XMLHttpRequest();
+        //var url = "/api/Books/" + id;
+        //request.open("PUT", url, false);
+        //request.onload = function () {
+        //    // Обработка кода ответа
+        //    var msg = "";
+        //    //   alert(request.status);
+        //    if (request.status === 401) {
+        //        msg = "У вас не хватает прав для удаления";
+        //    } else if (request.status === 204) {
+        //        msg = "Запись удалена";
+        //        loadBooks();
+        //    } else {
+        //        msg = "Неизвестная ошибка";
+        //    }
+        //    document.querySelector("#actionMsg").innerHTML = msg;
+        //};
+        //request.send();
     }
     catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
 }

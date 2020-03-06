@@ -49,7 +49,7 @@ function Register() {
             passwordConfirm: passwordConfirm
         }));
     }
-    catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
+    catch (e) { alert("Возникла непредвиденая ошибка при добавлении пользователя! Попробуйте позже!"); }
 }
 
 // Разбор ответа
@@ -62,26 +62,31 @@ function ParseResponse(e) {
             formError.removeChild(formError.firstChild);
         }
         // Обработка ответа от сервера
-        let response = JSON.parse(e.responseText);
-        document.querySelector("#msg").innerHTML = response.message;
-        alert(response.message);
-        getCurrentUser();
-        // Вывод сообщений об ошибках
-        if (response.error.length > 0) {
-            for (var i = 0; i < response.error.length; i++) {
-                let ul = document.querySelector("ul");
-                let li = document.createElement("li");
-                li.appendChild(document.createTextNode(response.error[i]));
-                ul.appendChild(li);
+        if  (e.status != 200) {
+            let response = JSON.parse(e.responseText);
+
+            document.querySelector("#msg").innerHTML = response.message;
+            alert(response.message);
+
+            // Вывод сообщений об ошибках
+            if (response.error.length > 0) {
+                for (var i = 0; i < response.error.length; i++) {
+                    let ul = document.querySelector("ul");
+                    let li = document.createElement("li");
+                    li.appendChild(document.createTextNode(response.error[i]));
+                    ul.appendChild(li);
+                }
             }
         }
-
+       else {
+            getCurrentUser();
+        }
 
         // Очистка полей паролей
         document.querySelector("#password").value = "";
         document.querySelector("#passwordConfirm").value = "";
     }
-    catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
+    catch (e) { alert("Возникла непредвиденая ошибка при чтении ответа! Попробуйте позже!"); }
 }
 
 function logOff() {
@@ -113,6 +118,7 @@ function getCurrentUser() {
         request.send();
   
 }
+
 
 
 

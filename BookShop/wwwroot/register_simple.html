@@ -32,9 +32,10 @@
     <meta name="generator" content="Jekyll v3.8.5">
     <title>Зарегистрироваться</title>
 
-
+    <!-- Подключаем Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <!--  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
 
 </head>
 <body>
@@ -56,109 +57,112 @@
                     <br /> Поле UserName может содержать только идущие подряд латинские буквы и цифры.
                 </p>
             </div>
-             <div class="msg-error mb-3">
-         <div id="msg"></div>
-         <ul id="formError"></ul>
-     </div>
-             <form class="needs-validation" id="regForm" action="javascript:void(0);" novalidate>
+            <div class="msg-error mb-3">
+                <div id="msg"></div>
+                <ul id="formError"></ul>
+            </div>
+            <form class="needs-validation" id="regForm" action="javascript:void(0);" novalidate>
 
-                 <div class="mb-3">
-                     <label for="fio">ФИО: </label>
+                <div class="mb-3">
+                    <label for="fio">ФИО: </label>
 
-                     <input type="text" id="fio" name="fio" class="form-control" placeholder="Иванов Иван Иванович" required>
+                    <input type="text" id="fio" name="fio" class="form-control" placeholder="Иванов Иван Иванович" required>
 
-                     <div class="invalid-feedback" style="width: 100%;">
-                         Поле "ФИО" обязательно к заполнению.
-                     </div>
-                 </div>
-                 <div class="mb-3">
-                     <label for="email">Email: </label>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        Поле "ФИО" не было заполнено или было заполнено неверно.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="email">Email: </label>
 
-                     <input type="text" id="email" name="email" class="form-control" placeholder="you@example.com" required>
-                     <div class="invalid-feedback" style="width: 100%;">
-                         Поле "Email" обязательно к заполнению.
-                     </div>
-                 </div>
-                 <div class="mb-3">
-                     <label for="name"> UserName: </label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="you@example.com" required>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        Поле "Email" не было заполнено или было заполнено неверно.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="name"> UserName: </label>
 
-                     <input type="text" id="name" name="name" class="form-control" placeholder="UserName" required>
-                     <div class="invalid-feedback" style="width: 100%;">
-                         Поле "UserName" обязательно к заполнению.
-                     </div>
-                 </div>
-                 <div class="mb-3">
-                     <label for="phone">Номер телефона: </label>
-                     <div class="input-group">
-                         <div class="input-group-prepend">
-                             <span class="input-group-text">+7</span>
-                         </div>
-                         <input type="text" id="phone" name="phone" class="form-control" placeholder="Номер телефона" required>
-                         <div class="invalid-feedback" style="width: 100%;">
-                             Поле "Номер телефона" обязательно к заполнению.
-                         </div>
-                     </div>
-                 </div>
-                 <div class="mb-3">
-                     <label for="address">Адрес: </label>
-
-                     <input type="text" id="address" name="address" class="form-control" placeholder="Адрес" required>
-                     <div class="invalid-feedback" style="width: 100%;">
-                         Поле "Адрес" обязательно к заполнению.
-                     </div>
-                 </div>
-                 <div class="mb-3">
-                     <label for="password">Пароль: </label>
-
-                     <input type="password" id="password" name="password" class="form-control" required>
-                     <div class="invalid-feedback" style="width: 100%;">
-                         Поле "Пароль" обязательно к заполнению.
-                     </div>
-                 </div>
-                 <div class="mb-3">
-                     <label for="passwordConfirm">Подтверждение пароля: </label>
-
-                     <input type="password" id="passwordConfirm" name="passwordConfirm" class="form-control" required>
-                     <div class="invalid-feedback" style="width: 100%;">
-                         Поле "Подтверждение пароля" обязательно к заполнению.
-                     </div>
-
-                 </div>
-                 <br />
-                 <button id="registerBtn" class="btn btn-primary btn-lg btn-block" type="submit">Регистрация</button>
-             </form>
-        </div>
-
-                <footer class="pt-4 my-md-5 pt-md-5 border-top">
-                    <div class="row">
-                        <div class="col-12 col-md">
-                            <img class="mb-2" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
-                            <small class="d-block mb-3 text-muted">Книжный магазин &copy; 2019</small>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="UserName" required>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        Поле "UserName" не было заполнено или было заполнено неверно.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="phone">Номер телефона: </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">+7</span>
                         </div>
-                        <div class="col-6 col-md">
-                            <h5>Магазины</h5>
-                            <ul class="list-unstyled text-small">
-                                <li><a class="text-muted" href="#">Адреса магазинов</a></li>
-                                <li><a class="text-muted" href="#">Услуги</a></li>
-                                <li><a class="text-muted" href="#">Партнеры</a></li>
-                                <li><a class="text-muted" href="#">О компании</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-6 col-md">
-                            <h5>Интернет-магазины</h5>
-                            <ul class="list-unstyled text-small">
-                                <li><a class="text-muted" href="#">Доставка и оплата</a></li>
-                                <li><a class="text-muted" href="#">Акции</a></li>
-                                <li><a class="text-muted" href="#">Книги</a></li>
-                                <li><a class="text-muted" href="#">Политика конфиденциальности</a></li>
-                            </ul>
+                        <input type="number" id="phone" name="phone" class="form-control" placeholder="Номер телефона" required >
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "Номер телефона" не было заполнено или было заполнено неверно.
                         </div>
                     </div>
-                </footer>
+                </div>
+                <div class="mb-3">
+                    <label for="address">Адрес: </label>
+
+                    <input type="text" id="address" name="address" class="form-control" placeholder="Адрес" required>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        Поле "Адрес" не было заполнено или было заполнено неверно.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="password">Пароль: </label>
+
+                    <input type="password" id="password" name="password" class="form-control" required>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        Поле "Пароль" не было заполнено или было заполнено неверно.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="passwordConfirm">Подтверждение пароля: </label>
+
+                    <input type="password" id="passwordConfirm" name="passwordConfirm" class="form-control" required>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        Поле "Подтверждение пароля" обязательно к заполнению.
+                    </div>
+
+                </div>
+                <br />
+                <button id="registerBtn" class="btn btn-primary btn-lg btn-block" type="submit" onclick="return validateForm()">Регистрация</button>
+            </form>
+        </div>
+
+        <footer class="pt-4 my-md-5 pt-md-5 border-top">
+            <div class="row">
+                <div class="col-12 col-md">
+                    <img class="mb-2" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+                    <small class="d-block mb-3 text-muted">Книжный магазин &copy; 2019</small>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Магазины</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="#">Адреса магазинов</a></li>
+                        <li><a class="text-muted" href="#">Услуги</a></li>
+                        <li><a class="text-muted" href="#">Партнеры</a></li>
+                        <li><a class="text-muted" href="#">О компании</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Интернет-магазины</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="#">Доставка и оплата</a></li>
+                        <li><a class="text-muted" href="#">Акции</a></li>
+                        <li><a class="text-muted" href="#">Книги</a></li>
+                        <li><a class="text-muted" href="#">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
             </div>
-            <script src="js/register.js"></script>
-            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-            <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-            <script src="/docs/4.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
-        </body>
+        </footer>
+    </div>
+    <script src="js/register.js"></script>
+    <script src="js/Validation.js"></script>
+    <!-- Подключаем Bootstrap JS -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="/docs/4.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+</body>
         </html>

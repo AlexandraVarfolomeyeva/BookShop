@@ -58,7 +58,7 @@ namespace BookShop.Controllers
                         {
                             message = "Добавлен новый пользователь: " + user.UserName
                         };
-                       // await CreateFirstOrder(user.Id);
+                        await CreateFirstOrder(user.Id);
                         return Ok(msg);
                     }
                     else
@@ -75,7 +75,8 @@ namespace BookShop.Controllers
                             error = ModelState.Values.SelectMany(e =>
                             e.Errors.Select(er => er.ErrorMessage))
                         };
-                        return Ok(errorMsg);
+                        return BadRequest(errorMsg);
+                        //return Ok(errorMsg);
                     }
                 }
                 else
@@ -87,7 +88,8 @@ namespace BookShop.Controllers
                         error = ModelState.Values.SelectMany(e =>
                         e.Errors.Select(er => er.ErrorMessage))
                     };
-                    return Ok(errorMsg);
+                    return BadRequest(errorMsg);
+                  // return Ok(errorMsg);
                 }
             }
             catch (Exception ex)
@@ -99,7 +101,8 @@ namespace BookShop.Controllers
                     error = ModelState.Values.SelectMany(e =>
                     e.Errors.Select(er => er.ErrorMessage))
                 };
-                return Ok(errorMsg);
+                //return Ok(errorMsg);
+                return BadRequest(errorMsg);
             }
         }
 
@@ -230,18 +233,26 @@ namespace BookShop.Controllers
         [Route("api/Account/CreateFirstOrder")]
         public async Task<Order> CreateFirstOrder(string id)
         {
-            await GetIdUserAsync();
-            Order order = new Order() //при регистрации создается новый заказ, актуальность которого =1
+            try
             {
-                DateDelivery = DateTime.Now,
-                DateOrder = new DateTime(),
-                SumOrder = 0,
-                SumDelivery = 50,
-                Active = 1,
-                UserId = id
-            };
-            await OrderEvent(order);//асинхронное создание заказа
-            return order;
+                await GetIdUserAsync();
+                Order order = new Order() //при регистрации создается новый заказ, актуальность которого =1
+                {
+                    DateDelivery = DateTime.Now,
+                    DateOrder = new DateTime(),
+                    SumOrder = 0,
+                    SumDelivery = 50,
+                    Active = 1,
+                    UserId = id
+                };
+                await OrderEvent(order);//асинхронное создание заказа
+                return order;
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex, "First order was not created.");
+                return null;
+            }
         }
 
     }
