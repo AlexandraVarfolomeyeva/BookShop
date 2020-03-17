@@ -9,24 +9,26 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BookShop.Models
 {
-    public  class Book
+    public class Book
     {
         [Required]
         [Key]
         public int Id { get; set; }
-        public string Publisher { get; set; } //издательство
         public string image { get; set; } //url картинки
         public string Year { get; set; } //год публикации
         public int Cost { get; set; } //стоимость
-        public string Author { get; set; } //автор(-ы)
+        public bool Store {get;set;} //есть ли на складе
         public string Content { get; set; } //Описание (аннотация) книги
         [Required]
         public string Title { get; set; } //Название книги
-        
+        public virtual int IdPublisher { get; set; }
+        public virtual Publisher Publisher { get; set; }
         public virtual ICollection<BookOrder> BookOrders { get; set; }
+        public virtual ICollection<BookAuthor> BookAuthors { get; set; }
         public Book()
         {
             BookOrders = new HashSet<BookOrder>();
+            BookAuthors = new HashSet<BookAuthor>();
         }
     }
 }

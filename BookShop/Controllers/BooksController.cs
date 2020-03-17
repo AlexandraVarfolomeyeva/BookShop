@@ -104,7 +104,8 @@ namespace BookShop.Controllers
             item.Cost = book.Cost;
             item.image = book.image;
             item.Publisher = book.Publisher;
-            item.Author = book.Author;
+            item.Store = book.Store;
+            item.BookAuthors = book.BookAuthors;
             item.Title = book.Title;
             item.Year = book.Year;
             _context.Book.Update(item);

@@ -19,6 +19,9 @@ namespace BookShop.Models
         #endregion
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<Book> Book { get; set; }
+        public virtual DbSet<BookAuthor> BookAuthor { get; set; }
+        public virtual DbSet<Author> Author { get; set; }
+        public virtual DbSet<Publisher> Publisher { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<BookOrder> BookOrder { get; set; }
 
@@ -32,18 +35,25 @@ namespace BookShop.Models
                 entity.HasMany(a => a.BookOrders).WithOne(a => a.Order).HasForeignKey(a => a.IdOrder);
                
             });
-
-            modelBuilder.Entity<Book>(entity =>
+            modelBuilder.Entity<Author>(entity =>
+            {
+                entity.HasMany(a => a.BookAuthors).WithOne(a => a.Author).HasForeignKey(a => a.IdAuthor);
+            });
+                modelBuilder.Entity<Book>(entity =>
             {
                 entity.HasMany(a => a.BookOrders).WithOne(a => a.Book).HasForeignKey(a => a.IdBook);
+                entity.HasMany(a => a.BookAuthors).WithOne(a => a.Book).HasForeignKey(a => a.IdBook);
             });
-
-
+                 modelBuilder.Entity<Publisher>(entity =>
+             {
+                  entity.HasMany(a => a.Books).WithOne(a => a.Publisher).HasForeignKey(a => a.IdPublisher);
+                });
             
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasMany(a => a.Orders).WithOne(b => b.User).HasForeignKey(c => c.UserId);
             });
+
             modelBuilder.Entity<BookOrder>(entity =>
             {
                 entity.HasOne(a => a.Order).WithMany(a => a.BookOrders).HasForeignKey(a => a.IdOrder);
