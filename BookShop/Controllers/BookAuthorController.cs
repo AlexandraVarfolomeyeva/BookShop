@@ -45,7 +45,7 @@ namespace BookShop.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var item = await _context.BookOrder.SingleOrDefaultAsync(m => m.Id == id);
+                var item = await _context.BookAuthor.SingleOrDefaultAsync(m => m.Id == id);
 
                 if (item == null)
                 {

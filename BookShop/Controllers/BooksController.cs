@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookShop.Controllers
 {
-
+    
     [Route("api/[controller]")]
     [ApiController]
     public class BooksController : ControllerBase
@@ -25,15 +26,21 @@ namespace BookShop.Controllers
         [HttpGet]
         public IEnumerable<Book> GetAll() //получение списка всех книг
         {
-            try {
-                return _context.Book.Include(p=>p.BookOrders);
-            } catch (Exception ex)
+            try
+            {
+                return _context.Book.Include(p => p.BookOrders);
+            }
+            catch (Exception ex)
             {
                 Log.Write(ex);
                 return null;
             }
-            
+
         }
+
+
+      
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBook([FromRoute] int id)

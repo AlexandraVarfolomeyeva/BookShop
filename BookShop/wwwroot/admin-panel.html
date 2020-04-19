@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+        .msg-error {
+            color: red;
+        }
+
+        button {
+            margin-top: 5px;
+        }
+
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>Зарегистрироваться</title>
+
+    <!-- Подключаем Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Bootstrap core CSS -->
+    <!--  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+
+</head>
+<body  onload="downloadAuthors(); downloadPublishers();">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+            <p id="counter"></p>
+            <a class="h1 my-2 mr-md-auto font-weight-normal align-items-center text-dark " href="index.html">Книжный магазин</a>
+            <nav class="my-2 my-md-0 mr-md-3">
+                <a class="p-2 text-dark" href="#">Доставка и оплата</a>
+                <a class="p-2 text-dark" href="about.html">Контакты</a>
+                <a class="p-2 text-dark" href="LogIn.html"> Войти </a>
+            </nav>
+        </div>
+        <hr class="mb-4">
+        <div class="row">
+            <div class="col-md-8 order-md-1">
+                <h4 class="mb-3"> Информация о книге </h4>
+                <div class="msg-error mb-3">
+                    <div id="msg"></div>
+                    <ul id="formError"></ul>
+                </div>
+                <hr class="mb-4">
+                <form class="needs-validation" id="addForm" action="javascript:void(0);" novalidate>
+                    <div class="mb-3">
+                        <label for="title">Название: </label>
+
+                        <input type="text" id="title" name="title" class="form-control" placeholder="Название" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "Название" не было заполнено или было заполнено неверно.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="author">Автор: </label>
+                        <select class="custom-select" id="authorSelect">
+                            <option selected>Выбрать...</option>
+                        </select>
+                        <!--<input type="text" id="author" name="author" class="form-control" placeholder="Иванов Иван Иванович" required>-->
+
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "Автор" не было заполнено или было заполнено неверно.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="content">Описание: </label>
+                        <textarea type="text" id="content" name="content" class="form-control" placeholder="Добавить описание" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="year">Год: </label>
+
+                        <input type="number" id="year" name="year" class="form-control" placeholder="2020" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "Год" не было заполнено или было заполнено неверно.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="publisher">Издательство: </label>
+                        <select class="custom-select" id="publisherSelect">
+                            <option selected>Выбрать...</option>
+                        </select>
+                        <!-- <input type="text" id="publisher" name="publisher" class="form-control" placeholder="Эскмо" required>-->
+
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "Издательство" не было заполнено или было заполнено неверно.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cost"> Цена в рублях: </label>
+
+                        <input type="number" id="cost" name="cost" class="form-control" placeholder="400" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "Цена" не было заполнено или было заполнено неверно.
+                        </div>
+                    </div>
+                    <hr class="mb-4">
+                    <div class="mb-3">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="store">
+                            <label class="custom-control-label" for="store">Наличие на складе</label>
+                        </div>
+                    </div>
+                    <br />
+                    <button id="addBtn" class="btn btn-primary btn-lg btn-block" type="submit" onclick="return validateForm()">Сохранить</button>
+                </form>
+            </div>
+            <div class="col-md-4 order-md-2 mb-4">
+                <div class="text-center">
+                    <img src="./img/empty.png" id="bookImg" class="rounded" alt="Обложка" width="150" height="215">
+                </div>
+                <hr class="mb-4">
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputImg" accept=".png, .jpg, .jpeg">
+                        <label class="custom-file-label" for="inputImg">Выбрать файл</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <footer class="pt-4 my-md-5 pt-md-5 border-top">
+            <div class="row">
+                <div class="col-12 col-md">
+                    <img class="mb-2" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+                    <small class="d-block mb-3 text-muted">Книжный магазин &copy; 2019</small>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Магазины</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="#">Адреса магазинов</a></li>
+                        <li><a class="text-muted" href="#">Услуги</a></li>
+                        <li><a class="text-muted" href="#">Партнеры</a></li>
+                        <li><a class="text-muted" href="#">О компании</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Интернет-магазины</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="#">Доставка и оплата</a></li>
+                        <li><a class="text-muted" href="#">Акции</a></li>
+                        <li><a class="text-muted" href="#">Книги</a></li>
+                        <li><a class="text-muted" href="#">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+        <script src="js/admin.js"></script>
+        <script src="js/Validation.js"></script>
+        <!-- Подключаем Bootstrap JS -->
+        <script src="js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+        <script src="/docs/4.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+</body>
+</html>

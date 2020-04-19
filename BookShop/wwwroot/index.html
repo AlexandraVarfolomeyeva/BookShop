@@ -9,70 +9,67 @@
     
     <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
 </head>
-<body onload="GetOrder();getCurrentUser();loadBooks();  ">
-    <!---->
+<body onload="GetOrder(); getCurrentUser(); loadBooks();">
     <div class="container">
         <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
             <p id="counter"></p>
             <a class="h1 my-2 mr-md-auto font-weight-normal align-items-center text-dark " href="index.html">Книжный магазин</a>
             <nav class="my-2 my-md-0 mr-md-3">
                 <a class="p-2 text-dark" href="#">Доставка и оплата</a>
-                <!--htmlpage.html-->
-                <a class="p-2 text-dark" href="#">Контакты</a>
+                <a class="p-2 text-dark" href="about.html">Контакты</a>
                 <a class="p-2 text-dark" href="LogIn.html"> Войти </a>
+
+                <!--<div  class="p-2" id="login-user">
+                </div>-->
             </nav>
         </div>
+       
         <div id="BasketDiv">
         </div>
-        <!--  <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
-          <a class="h3 display-5 text-white align-items-center" href="Basket.html">Корзина</a>
-          <div class="msgClass">
-              <div id="msgAuth"></div>
-              <div id="msg"></div>
-              <ul id="formError"></ul>
-          </div>
-          <div id="BasketDiv">
-          </div>
-    </div> -->
-        <!--<button onclick="CreateFirstOrder();">Создать заказ</button>-->
         <div>
-            <h3 class="h3 align-items-center">Книги</h3>
-            <div id="actionMsg" class="msgClass"></div>
-            <div class="container" id="ContainerDiv">
-
-            </div>
-        </div>
-
-
-        <footer class="pt-4 my-md-5 pt-md-5 border-top">
             <div class="row">
                 <div class="col-12 col-md">
-                    <img class="mb-2" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
-                    <small class="d-block mb-3 text-muted">Книжный магазин &copy; 2019</small>
+                    <h3 class="col-md-8 order-md-1">Книги</h3>
                 </div>
-                <div class="col-6 col-md">
-                    <h5>Магазины</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="#">Адреса магазинов</a></li>
-                        <li><a class="text-muted" href="#">Услуги</a></li>
-                        <li><a class="text-muted" href="#">Партнеры</a></li>
-                        <li><a class="text-muted" href="#">О компании</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>Интернет-магазины</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="#">Доставка и оплата</a></li>
-                        <li><a class="text-muted" href="#">Акции</a></li>
-                        <li><a class="text-muted" href="#">Книги</a></li>
-                        <li><a class="text-muted" href="#">Политика конфиденциальности</a></li>
-                    </ul>
+                <div class="col-md-4 order-md-2 mb-4 ">
+                    <div id="adminDiv" class="text-right"></div>
                 </div>
             </div>
-        </footer>
-    </div>
+                <hr class="mb-4  ">
+                <div id="actionMsg" class="msgClass"></div>
+                <div class="container" id="ContainerDiv">
 
-    <!--   <button onclick="add(1);" class="btn btn-dark"> Купить </button>-->
+                </div>
+            </div>
+
+
+            <footer class="pt-4 my-md-5 pt-md-5 border-top">
+                <div class="row">
+                    <div class="col-12 col-md">
+                        <img class="mb-2" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+                        <small class="d-block mb-3 text-muted">Книжный магазин &copy; 2019</small>
+                    </div>
+                    <div class="col-6 col-md">
+                        <h5>Магазины</h5>
+                        <ul class="list-unstyled text-small">
+                            <li><a class="text-muted" href="#">Адреса магазинов</a></li>
+                            <li><a class="text-muted" href="#">Услуги</a></li>
+                            <li><a class="text-muted" href="#">Партнеры</a></li>
+                            <li><a class="text-muted" href="#">О компании</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-md">
+                        <h5>Интернет-магазины</h5>
+                        <ul class="list-unstyled text-small">
+                            <li><a class="text-muted" href="#">Доставка и оплата</a></li>
+                            <li><a class="text-muted" href="#">Акции</a></li>
+                            <li><a class="text-muted" href="#">Книги</a></li>
+                            <li><a class="text-muted" href="#">Политика конфиденциальности</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </footer>
+        </div>
     <script src="js/scripts.js"></script>
     <!-- Подключаем Bootstrap JS -->
     <script src="js/bootstrap.min.js"></script>

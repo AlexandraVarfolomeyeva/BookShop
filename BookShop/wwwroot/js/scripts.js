@@ -1,6 +1,10 @@
 ﻿const uri = "/api/Books/";
-const uri1 = "/api/BookOrder/";
-const uri2 = "/api/Orders/";
+const uriBookOrder = "/api/BookOrder/";
+const uriOrders = "/api/Orders/";
+const uriPublisher = "/api/Publisher/";
+const uriAuthors = "/api/Authors/";
+const uriBookAuthor = "/api/BookAuthor/";
+const uriView = "/api/View/";
 let items = null;
 let books = null;
 let orders = null;
@@ -9,11 +13,13 @@ var order=0;
 
 function GetOrder() {//получение id текущего заказа и его отображение
     try {
+        var y = "";
         GetRole();
-        getIdUser();
         if (Role === "user") {
+            y += "<a class=\"p-2 text-dark\" href=\"LogIn.html\"> Выйти </a>";
+            getIdUser();
             var request2 = new XMLHttpRequest();
-            request2.open("GET", uri2, false);
+            request2.open("GET", uriOrders, false);
             orders = null;
             request2.onload = function () {
                 if (request2.status === 200) { //если мы получили список заказов
@@ -29,7 +35,14 @@ function GetOrder() {//получение id текущего заказа и е
                 }
             };
             request2.send();
+        } else if (Role === "admin") {
+            y += "<a class=\"p-2 text-dark\" href=\"LogIn.html\"> Выйти </a>";
+            var x = "<a class=\"btn btn-dark\" role=\"button\" href=\"admin-panel.html\">Добавить</a>";
+            document.getElementById("adminDiv").innerHTML = x;//выводим в документ код html    
+        } else if (Role === "") {
+            y += "<a class=\"text-dark\" href=\"LogIn.html\"> Войти </a>";
         }
+      //  document.getElementById("login-user").innerHTML=y;//выводим в документ код html    
     } catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
 }
 var myObj = "";
@@ -76,6 +89,8 @@ function CreateFirstOrder() {
                 }));
             } else alert("У вас уже существует активный заказ! Прежде чем создавать новый вам надо заказать текущий на вкладке Корзина!");
         } else alert("У вас не хватает прав!");
+
+      
     }
     catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
 }
@@ -90,46 +105,54 @@ function GetRole() {
     request.send();
 }
 
+
+
+async function displayBooks(items) {
+    var i, x = "";
+    var k = 0;//счетчик количество книг в строке
+    x += "<div class=\"row\">";//начинаем строку
+    for (i in items) {
+        if (k == 3) { //если мы заполнили строку -- по 3 книги в строке
+            x += "</div>";
+            x += "<hr>";
+            x += "<div class=\"row\">";
+            k = 0;
+        }//отображение информации о книге
+        x += "<div class=\"col - sm\">";
+        x += "<img src=\"" + items[i].image + "\" width=\"150\" height=\"215\" alt=\"" + items[i].title + "\">";
+        x += "<h5>" + items[i].title + "</h5>";
+        x += "<h6> Год: " + items[i].year + "</h6>";
+        x += "<h6> Автор: " + items[i].authors + "</h6>";
+        x += "<h6> Издательство: " + items[i].publisher + "</h6>";
+        x += "<h5> Цена: " + items[i].cost + "</h5>";
+        if (Role === "user") {
+            x += "<button onclick=\"add(" + items[i].id + "," + items[i].cost + ");\" class=\"btn btn-dark\"> Купить </button> <br/>";
+        }
+        if (Role === "admin") {
+            x += "<button onclick=\"editBook(" + items[i].id + ");\" class=\"btn btn-dark\"> Редактировать </button>";
+            x += "<button onclick=\"deleteBook(" + items[i].id + ");\" class=\"btn btn-dark\"> Удалить </button>";
+        }
+        x += "</div >";
+        k = k + 1;
+    }
+    while (k !== 3) { //если в последней строке оказалось меньше книг, чем 3
+        //создаем пустую колонку
+        x += "<div class=\"col - sm\">";
+        x += "</div>";
+        k = k + 1;
+    }
+    x += "</div>";
+    document.getElementById("ContainerDiv").innerHTML += x;//выводим в документ код html    
+}
+
 function loadBooks() { //загрузка книг
     try {
-        var i, x = "";
-        var k = 0;//счетчик количество книг в строке
+     
         var request = new XMLHttpRequest();
-        request.open("GET", uri, false);
+        request.open("GET", uriView, false);
         request.onload = function () {
             items = JSON.parse(request.responseText);
-            x += "<div class=\"row\">";//начинаем строку
-            for (i in items) {
-                if (k == 3) { //если мы заполнили строку -- по 3 книги в строке
-                    x += "</div>";
-                    x += "<hr>";
-                    x += "<div class=\"row\">";
-                    k = 0;
-                }//отображение информации о книге
-                x += "<div class=\"col - sm\">";
-                x += "<img src=\"" + items[i].image + "\" width=\"150\" height=\"215\" alt=\"" + items[i].title + "\">";
-                x += "<h5>" + items[i].title + "</h5>";
-                x += "<h6> Id: " + items[i].id + "</h6>";
-                x += "<h6> Год: " + items[i].year + "</h6>";
-                x += "<h6> Автор: " + items[i].author + "</h6>";
-                x += "<h6> Издательство: " + items[i].publisher + "</h6>";
-                x += "<h5> Цена: " + items[i].cost + "</h5>";
-                x += "<button onclick=\"add(" + items[i].id + "," + items[i].cost + ");\" class=\"btn btn-dark\"> Купить </button> <br/>";
-                if (Role === "admin") {
-                    x += "<button onclick=\"editBook(" + items[i].id + ");\" class=\"btn btn-dark\"> Редактировать </button>";
-                    x += "<button onclick=\"deleteBook(" + items[i].id + ");\" class=\"btn btn-dark\"> Удалить </button>";                    
-                }
-                x += "</div >";
-                k = k + 1;
-            }
-            while (k !== 3) { //если в последней строке оказалось меньше книг, чем 3
-                //создаем пустую колонку
-                x += "<div class=\"col - sm\">";
-                x += "</div>";
-                k = k + 1;
-            }
-            x += "</div>";
-            document.getElementById("ContainerDiv").innerHTML = x;//выводим в документ код html    
+            displayBooks(items);
             loadBasket();
         };
 
@@ -149,13 +172,11 @@ function loadBasket() { //загружаем корзину, в которой �
         var k = 0; //счетчик количества книг в заказе
         if (order) { //если текущий заказ определен
             var request = new XMLHttpRequest();
-            request.open("GET", uri1, false); //получение строк заказа
+            request.open("GET", uriBookOrder, false); //получение строк заказа
             request.onload = function () {
                 if (request.status === 200) {
                     items = JSON.parse(request.responseText);
-            
-            
-                    x += "<br />";
+                //    x += "<br />";
                     for (i in items) {
                         if (items[i].idOrder === order) {
                             k += 1; //считаем количество записей в текущем заказе
@@ -170,7 +191,7 @@ function loadBasket() { //загружаем корзину, в которой �
             };
             request.send();
             var request2 = new XMLHttpRequest();
-            var url = uri2 + order;
+            var url = uriOrders + order;
             request2.open("GET", url, false);//получение данных текущего заказа
             var orderCurrent;
             request2.onload = function () {
@@ -197,7 +218,7 @@ function add(id, sum) {
         'IdOrder': order
     }
     var request = new XMLHttpRequest();
-    request.open("POST", uri1);
+    request.open("POST", uriBookOrder);
     request.onload = function () {
         // Обработка кода ответа
         var msg = "";//сообщение
@@ -205,16 +226,16 @@ function add(id, sum) {
             msg = "Не добавлено";
         } else if (request.status === 201) {
             msg = "Запись добавлена";
-            uri3 = uri2 + order;//получение текущего заказа
+            uriOrder = uriOrders + order;//получение текущего заказа
             var request1 = new XMLHttpRequest();
-            request1.open("GET", uri3, false);
+            request1.open("GET", uriOrder, false);
             var item;///Получение данных о заказе + сумму новой книги
             request1.onload = function () {
                 item = JSON.parse(request1.responseText);
                 item.sumOrder += sum;//к сумме текущего заказа прибавляется стоимость книги
                 ///Изменение данных о заказе -- отправка изменений в БД
                 var request2 = new XMLHttpRequest();
-                request2.open("PUT", uri3);
+                request2.open("PUT", uriOrder);
                 request2.onload = function () {
                     loadBasket();//загрузка корзины для обновления данных о заказе
                 };
@@ -272,7 +293,7 @@ function deleteBook(id){//удаление книги -- метод, досту�
     }
     catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
 }
-function editBook(id) {//удаление книги -- метод, доступный только администратору
+function editBook(id) {//редактирование книги -- метод, доступный только администратору
     try {
         //вывести модальное окно, где записи будут редактироваться
         //по нажатию кнопки сохр. отпр. запрос.

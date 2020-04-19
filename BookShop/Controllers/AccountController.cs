@@ -19,11 +19,14 @@ namespace BookShop.Controllers
         public static event OrderDelegate OrderEvent; //событие создания заказа
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly BookingContext _context;
+
         public AccountController(UserManager<User> userManager,
-        SignInManager<User> signInManager)
+        SignInManager<User> signInManager, BookingContext context)
         {
             OrdersController.IDEvent += new IdDelegate(GetIdUserAsync);//присоединение метода к событию
-           
+
+            _context = context; // получаем контекст базы данных
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -58,7 +61,18 @@ namespace BookShop.Controllers
                         {
                             message = "Добавлен новый пользователь: " + user.UserName
                         };
-                        await CreateFirstOrder(user.Id);
+                      //  await CreateFirstOrder(user.Id);
+                        Order order = new Order();
+                        order.User = user;
+                        order.UserId = user.Id;
+                        order.SumDelivery = 50;
+                        order.SumOrder = 0;
+                        order.Active = 1;
+                        order.DateDelivery= DateTime.Now.AddMonths(1);
+                        order.DateOrder = DateTime.Now;
+                        _context.Order.Add(order); //добавление заказа в БД
+                        await _context.SaveChangesAsync();//асинхронное сохранение изменений
+                        Log.WriteSuccess(" OrdersController.Create", "добавление заказа " + order.Id + " в БД");
                         return Ok(msg);
                     }
                     else
