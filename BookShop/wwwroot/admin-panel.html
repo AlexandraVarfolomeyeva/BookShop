@@ -30,7 +30,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
-    <title>Зарегистрироваться</title>
+    <title>Добавить книгу</title>
 
     <!-- Подключаем Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -117,7 +117,7 @@
                         </div>
                     </div>
                     <br />
-                    <button id="addBtn" class="btn btn-primary btn-lg btn-block" type="submit" onclick="return validateForm()">Сохранить</button>
+
                 </form>
             </div>
             <div class="col-md-4 order-md-2 mb-4">
@@ -127,12 +127,16 @@
                 <hr class="mb-4">
                 <div class="input-group mb-3">
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputImg" accept=".png, .jpg, .jpeg">
-                        <label class="custom-file-label" for="inputImg">Выбрать файл</label>
+                        <input type="file" id="inputImg" accept=".png, .jpg, .jpeg" onchange="getImg()">
+                        <label id="labelImg" class="custom-file-label" for="inputImg">Выбрать файл</label>
                     </div>
+                    <!--  <button onclick="getImg()">get</button>-->
                 </div>
-
             </div>
+
+        </div>
+        <div class="row">
+            <button id="addBtn" class="btn btn-primary btn-lg btn-block" type="submit">Сохранить</button>
         </div>
         <footer class="pt-4 my-md-5 pt-md-5 border-top">
             <div class="row">

@@ -11,8 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
             event.stopPropagation()
         }
         else {
-            logOff();
-            Register();
+            addBook();
         }
         elForm.classList.add('was-validated')
     });
@@ -33,10 +32,11 @@ function downloadAuthors() {
     request.send();
 }
 
-$("#inputImg").change(function () {
-    var filename = this.files[0].name
-    console.log(filename);
-});
+function getImg() {
+    var x = document.getElementById("inputImg");
+    document.getElementById('labelImg').innerHTML = x.files[0].name;
+    document.getElementById('bookImg').src = window.URL.createObjectURL(x.files[0]);
+}
 
 function downloadPublishers() {
     let request = new XMLHttpRequest();
@@ -63,44 +63,39 @@ function addBook() {
         var year = document.querySelector("#year").value;
         var publisherSelect = document.querySelector("#publisherSelect").value; ///publisherSelect
         var cost = document.querySelector("#cost").value;
-        var store = document.querySelector("#store").value;
-        var inputImg = document.querySelector("#inputImg").value;
+        var store = true;  //document.querySelector("#store").checked;
+        var x = document.getElementById("inputImg");
+        if (x.files.length == 0) {
+            var inputImg = "../img/empty.png";
+        }
+        else {
+
+            console.log(x.files);
+            var inputImg = "../img/" + x.files[0].name;
+        }
+        author = [authorSelect];
+
         var request = new XMLHttpRequest();
         request.open("POST", uriBooks);
         request.onload = function () {
             // Обработка кода ответа
-            var msg = "";//сообщение
-            if (request.status === 200) {
-                msg = "Не добавлено";
-            } else if (request.status === 201) {
-                msg = "Запись добавлена";
-                uriOrder = uriOrders + order;//получение текущего заказа
-                var request1 = new XMLHttpRequest();
-                request1.open("GET", uriOrder, false);
-                var item;///Получение данных о заказе + сумму новой книги
-                request1.onload = function () {
-                    item = JSON.parse(request1.responseText);
-                    item.sumOrder += sum;//к сумме текущего заказа прибавляется стоимость книги
-                    ///Изменение данных о заказе -- отправка изменений в БД
-                    var request2 = new XMLHttpRequest();
-                    request2.open("PUT", uriOrder);
-                    request2.onload = function () {
-                        loadBasket();//загрузка корзины для обновления данных о заказе
-                    };
-                    request2.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-                    request2.send(JSON.stringify(item));
-                };
-                request1.send();
-
-            } else if (request.status === 404) {
-                msg = "Пожалуйста, авторизируйтесь"
+            if (request.status == 201) {
+                window.location.href = "index.html";
             } else {
-                msg = "Неизвестная ошибка";
+                alert("Error");
             }
-            document.querySelector("#actionMsg").innerHTML = msg;//вывод сообщения
         };
         request.setRequestHeader("Accepts", "application/json;charset=UTF-8");
         request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        request.send(JSON.stringify(book));//добавление строки заказа
+        request.send(JSON.stringify({
+            image: inputImg,
+            year: year,
+            cost: cost,
+            store: store,
+            content: content,
+            title: title,
+            publisher: publisherSelect,
+            authors: author        
+        }));//добавление строки заказа
     } catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
 }

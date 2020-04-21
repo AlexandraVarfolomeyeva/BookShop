@@ -69,8 +69,8 @@ namespace BookShop.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Create([FromBody] Book item)
+        //[Authorize(Roles = "admin")]
+        public async Task<IActionResult> Create([FromBody] BookAdd item)
         {//создание новой книги возможно только администратором
             try
             {
@@ -79,11 +79,25 @@ namespace BookShop.Controllers
                     Log.WriteSuccess(" BooksController.Create", "Валидация внутри контроллера неудачна.");
                     return BadRequest(ModelState);
                 }
+                Book book = new Book();
+                book.Year = item.Year;
+                book.Title = item.Title;
+                book.Store = item.Store;
+                book.image = item.image;
+                book.IdPublisher = item.Publisher;
+                book.Cost = item.Cost;
+                book.Content = item.Content;
+                _context.Book.Add(book);
+                for (int i = 0; i < item.Authors.Length; i++)
+                {
+                    BookAuthor bookauthor = new BookAuthor();
+                    bookauthor.IdAuthor = item.Authors[i];
+                    bookauthor.IdBook = book.Id;
+                    _context.BookAuthor.Add(bookauthor);
+                }
+                 await _context.SaveChangesAsync();
 
-                _context.Book.Add(item);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetBook", new { id = item.Id }, item);
+                return CreatedAtAction("GetBook", new { id = book.Id }, book);
             } catch (Exception ex)
             {
                 Log.Write(ex);

@@ -152,10 +152,10 @@ function loadBooks() { //загрузка книг
         request.open("GET", uriView, false);
         request.onload = function () {
             items = JSON.parse(request.responseText);
+            document.getElementById("ContainerDiv").innerHTML = "";
             displayBooks(items);
             loadBasket();
         };
-
         request.send();
     } catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
 }
