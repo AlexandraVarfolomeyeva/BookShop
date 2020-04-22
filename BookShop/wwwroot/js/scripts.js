@@ -221,11 +221,7 @@ function add(id, sum) {
     request.open("POST", uriBookOrder);
     request.onload = function () {
         // Обработка кода ответа
-        var msg = "";//сообщение
-        if (request.status === 200) {
-            msg = "Не добавлено";
-        } else if (request.status === 201) {
-            msg = "Запись добавлена";
+        if (request.status === 201) {
             uriOrder = uriOrders + order;//получение текущего заказа
             var request1 = new XMLHttpRequest();
             request1.open("GET", uriOrder, false);
@@ -245,11 +241,10 @@ function add(id, sum) {
             request1.send();
             
         } else if (request.status === 404) {
-            msg = "Пожалуйста, авторизируйтесь"
+            alert("Пожалуйста, авторизируйтесь");
         } else {
-            msg = "Неизвестная ошибка";
+            alert("Неизвестная ошибка");
         }
-        document.querySelector("#actionMsg").innerHTML = msg;//вывод сообщения
     };
     request.setRequestHeader("Accepts", "application/json;charset=UTF-8");
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
