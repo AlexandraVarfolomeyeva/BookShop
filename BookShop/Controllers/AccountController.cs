@@ -24,8 +24,7 @@ namespace BookShop.Controllers
         public AccountController(UserManager<User> userManager,
         SignInManager<User> signInManager, BookingContext context)
         {
-            OrdersController.IDEvent += new IdDelegate(GetIdUserAsync);//присоединение метода к событию
-
+         
             _context = context; // получаем контекст базы данных
             _userManager = userManager;
             _signInManager = signInManager;
@@ -151,7 +150,7 @@ namespace BookShop.Controllers
                         error = ModelState.Values.SelectMany(e =>
                         e.Errors.Select(er => er.ErrorMessage))
                     };
-                    return Ok(errorMsg);
+                    return BadRequest(errorMsg);
                 }
             }
             else
@@ -163,9 +162,11 @@ namespace BookShop.Controllers
                     error = ModelState.Values.SelectMany(e =>
                     e.Errors.Select(er => er.ErrorMessage))
                 };
-                return Ok(errorMsg);
+                return BadRequest(errorMsg);
             }
         }
+
+
         [HttpPost]
         [Route("api/Account/LogOff")]
         //[ValidateAntiForgeryToken]
@@ -206,21 +207,26 @@ namespace BookShop.Controllers
         _userManager.GetUserAsync(HttpContext.User);
 
 
+
         [HttpGet]
-        [Route("api/Account/WhoisAuthenticated")]
-        public async Task<string> GetIdUserAsync()
+        [Route("api/Account/CurrentUserInfo")]
+        public async Task<IActionResult> GetCurrentUserInfo()
         {//получение id текущего пользователя
             try
             {
-              User usr = await _userManager.GetUserAsync(HttpContext.User);
-              if (usr!=null)  id = usr.Id;
-              //await LogisAuthenticatedOff();
+                User usr = await _userManager.GetUserAsync(HttpContext.User);
+                if (usr == null)//если ничего не получили -- не найдено
+                {
+                    Log.WriteSuccess(" AccountController.CurrentUserInfo ", "ничего не получили.");
+                    return NotFound();
+                }
+                return Ok(usr);
             }
             catch (Exception ex)
             {
                 Log.Write(ex);
+                return BadRequest();
             }
-            return id;
         }
 
         [HttpGet]
@@ -243,33 +249,6 @@ namespace BookShop.Controllers
             }
             return role;
         }
-
-        [HttpGet]
-        [Route("api/Account/CreateFirstOrder")]
-        public async Task<Order> CreateFirstOrder(string id)
-        {
-            try
-            {
-                await GetIdUserAsync();
-                Order order = new Order() //при регистрации создается новый заказ, актуальность которого =1
-                {
-                    DateDelivery = DateTime.Now,
-                    DateOrder = new DateTime(),
-                    SumOrder = 0,
-                    SumDelivery = 50,
-                    Active = 1,
-                    UserId = id
-                };
-                await OrderEvent(order);//асинхронное создание заказа
-                return order;
-            }
-            catch (Exception ex)
-            {
-                Log.Write(ex, "First order was not created.");
-                return null;
-            }
-        }
-
     }
 
 }

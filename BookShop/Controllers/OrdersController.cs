@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BookShop.BLL;
 using BookShop.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,18 +19,25 @@ namespace BookShop.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly BookingContext _context;
-        public OrdersController(BookingContext context)
+        private readonly UserManager<User> _userManager;
+
+        public OrdersController(UserManager<User> userManager, BookingContext context)
         {
+            _userManager = userManager;
             _context = context; // получаем контекст базы данных
             AccountController.OrderEvent += new OrderDelegate(Create); //получаем id текущего пользователя из AccountController
         }
         public static event IdDelegate IDEvent; //событие по получению id текущего пользователя из AccountController
 
-        
+        private Task<User> GetCurrentUserAsync() =>
+_userManager.GetUserAsync(HttpContext.User);
+
         [HttpGet]
-       public IEnumerable<Order> GetAll() //получить все заказы
+       public async Task<IEnumerable<Order>> GetAllAsync() //получить все заказы
         {
-           string id = IDEvent().Result; //получаем id текущего пользователя из AccountController
+            User usr = await _userManager.GetUserAsync(HttpContext.User);
+            //  string id = IDEvent().Result; //получаем id текущего пользователя из AccountController
+            string id = usr.Id;
             try
             {//возвращаем список всех заказов для текущего пользователя
                 if (id !="")
@@ -128,7 +136,7 @@ namespace BookShop.Controllers
             _context.Order.Update(item);
             await _context.SaveChangesAsync();
              Log.WriteSuccess(" OrdersController.Update", "обновление заказа " + order.Id + " в БД.");
-                GetDiscount();
+                GetDiscountAsync();
              return NoContent();
         }
             catch (Exception ex)
@@ -170,10 +178,10 @@ namespace BookShop.Controllers
 
         [HttpGet]
         [Route("api/Orders/GetDiscount")]
-        public IEnumerable<Order> GetDiscount()
+        public async Task<IEnumerable<Order>> GetDiscountAsync()
         {
             BuyService b = new BuyService(10);
-            IEnumerable<Order> g = GetAll();
+            IEnumerable<Order> g = await GetAllAsync();
             return b.GetDiscount(g, 0);
         }
     }

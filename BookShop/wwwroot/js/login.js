@@ -1,8 +1,7 @@
 ﻿// Обработка клика по кнопке регистрации
 document.querySelector("#loginBtn").addEventListener("click", 
     logIn);
-document.querySelector("#logoffBtn").addEventListener("click",
-    logOff);
+
 
 function logIn() {
     try {
@@ -39,7 +38,10 @@ function logIn() {
                 }
                 document.getElementById("Password").value = "";
             }
-            getUser();
+            if (request.status === 200) {
+                //   alert("Вы успешно вошли!");
+                window.location.href = "index.html";
+            }
         };
         // Запрос на сервер
         request.send(JSON.stringify({
@@ -51,50 +53,4 @@ function logIn() {
     }
     catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
 }
-function logOff() {
-    try {
-        var request = new XMLHttpRequest();
-        request.open("POST", "api/account/logoff");
-        request.onload = function () {
-            var msg = JSON.parse(this.responseText);
-            document.getElementById("msg").innerHTML = "";
-            var mydiv = document.getElementById('formError');
-            while (mydiv.firstChild) {
-                mydiv.removeChild(mydiv.firstChild);
-            }
-            document.getElementById("msg").innerHTML = msg.message;
 
-        };
-        request.setRequestHeader("Content-Type",
-            "application/json;charset=UTF-8");
-        request.send();
-    }
-    catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
-}
-
-function getCurrentUser() {
-    try {
-        let request = new XMLHttpRequest();
-        request.open("POST", "/api/Account/isAuthenticated", true);
-        request.onload = function () {
-            let myObj = "";
-            myObj = request.responseText !== "" ?
-                JSON.parse(request.responseText) : {};
-            document.getElementById("msg").innerHTML = myObj.message;
-        };
-        request.send();
-    }
-    catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
-}
-
-function getUser() {
-    let request = new XMLHttpRequest();
-    request.open("GET", "/api/Account/WhoisAuthenticated", true);
-    request.onload = function () {
-        if (request.status === 200) {
-         //   alert("Вы успешно вошли!");
-            window.location.href = "index.html";
-        }
-    };
-    request.send();
-}

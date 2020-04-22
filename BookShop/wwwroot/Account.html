@@ -18,7 +18,7 @@
     <!-- Custom styles for this template -->
     <link href="css/signin.css" rel="stylesheet">
 </head>
-<body onload="getCurrentUser();">
+<body>
     <div class="container">
         <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
             <p id="counter"></p>
@@ -29,72 +29,136 @@
                 <a class="p-2 text-dark" href="LogIn.html"> Войти </a>
             </nav>
         </div>
-
-        <div class="text-center">
-            <!--id="sign" -->
-            <form class="form-signin">
-                <img class="mb-4" src="https://openbookphilly.com/wp-content/uploads/2016/11/bookstack.png" alt="" width="72" height="72">
-                <h1 class="h3 mb-3 font-weight-normal"> Пожалуйста, войдите в систему </h1>
-
-                <div class="msgClass">
-                    <div id="msgAuth"></div>
+        <div class="row">
+            <div class="col-md-8 order-md-1">
+                <h4 class="mb-3"> Редактировать информацию о пользователе </h4>
+                <div class="mb-3">
+                    <p>
+                        Обратите внимание, что Пароль должен состоять из латинских букв, цифр, как минимум одной заглавной и одной строчной буквы и одного служебного символа.
+                        <br /> Поле UserName может содержать только идущие подряд латинские буквы и цифры.
+                    </p>
+                </div>
+                <div class="msg-error mb-3">
                     <div id="msg"></div>
                     <ul id="formError"></ul>
                 </div>
 
-                <label for="User"> UserName </label><!--class="sr-only"-->
-                <input type="text" id="User" name="User" class="form-control" placeholder="UserName">
+                <form class="needs-validation" id="regForm" action="javascript:void(0);" novalidate>
 
-                <div>
-                    <label for="Password"> Пароль </label><!--class="sr-only"-->
-                    <input type="password" id="Password" name="Password" class="form-control" placeholder="Password">
-                </div>
-                <div class="checkbox mb-3">
-                    <label>
-                        <input type="checkbox" id="Remember" value="remember-me"> Запомнить меня
-                    </label>
-                </div>
-            </form>
-            <div class="text-center">
-                <button id="loginBtn" class="btn btn-primary inout">Войти</button><br />
-                <button id="logoffBtn" class="btn btn-primary inout">Выйти</button><br />
-                <a class="p-2 text-dark" href="register_simple.html"> Зарегистрироваться</a><br />
-                <p class="mt-5 mb-3 text-muted"> Книжный магазин &copy; 2019</p>
+                    <div class="mb-3">
+                        <label for="fio">ФИО: </label>
+
+                        <input type="text" autocomplete="off" id="fio" name="fio" class="form-control" placeholder="Иванов Иван Иванович" required>
+
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "ФИО" не было заполнено или было заполнено неверно.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email">Email: </label>
+
+                        <input type="email" autocomplete="off" id="email" name="email" class="form-control" placeholder="you@example.com" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "Email" не было заполнено или было заполнено неверно.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name"> UserName: </label>
+
+                        <input type="text" autocomplete="off" id="name" name="name" class="form-control" placeholder="UserName" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "UserName" не было заполнено или было заполнено неверно.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone">Номер телефона: </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">+7</span>
+                            </div>
+                            <input type="number" autocomplete="off" id="phone" name="phone" class="form-control" placeholder="Номер телефона" required>
+                            <div class="invalid-feedback" style="width: 100%;">
+                                Поле "Номер телефона" не было заполнено или было заполнено неверно.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address">Адрес: </label>
+
+                        <input type="text" id="address" autocomplete="off" name="address" class="form-control" placeholder="Адрес" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "Адрес" не было заполнено или было заполнено неверно.
+                        </div>
+                    </div>
+                    <h5 class="mb-3"> Изменить пароль: </h5>
+                    <div class="mb-3">
+                        <label for="OldPassword">Старый пароль: </label>
+
+                        <input type="password" id="OldPassword" name="OldPassword" class="form-control" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "Пароль" не было заполнено или было заполнено неверно.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password">Новый пароль: </label>
+
+                        <input type="password" id="password" name="password" class="form-control" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "Пароль" не было заполнено или было заполнено неверно.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="passwordConfirm">Повторить новый пароль: </label>
+
+                        <input type="password" id="passwordConfirm" name="passwordConfirm" class="form-control" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "Подтверждение пароля" обязательно к заполнению.
+                        </div>
+
+                    </div>
+                    <br />
+                    <button id="changeBtn" class="btn btn-primary btn-lg btn-block" type="submit" onclick="return validateForm()">Сохранить изменения</button>
+                </form>
+
+            </div>
+            <div class="col-md-4 order-md-2 mb-4">
+                <button id="logoffBtn" class="btn btn-primary btn-dark inout" type="submit">Выйти</button><br />
             </div>
         </div>
-        <footer class="pt-4 my-md-5 pt-md-5 border-top">
-            <div class="row">
-                <div class="col-12 col-md">
-                    <img class="mb-2" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
-                    <small class="d-block mb-3 text-muted">Книжный магазин &copy; 2019</small>
+            <footer class="pt-4 my-md-5 pt-md-5 border-top">
+                <div class="row">
+                    <div class="col-12 col-md">
+                        <img class="mb-2" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+                        <small class="d-block mb-3 text-muted">Книжный магазин &copy; 2019</small>
+                    </div>
+                    <div class="col-6 col-md">
+                        <h5>Магазины</h5>
+                        <ul class="list-unstyled text-small">
+                            <li><a class="text-muted" href="#">Адреса магазинов</a></li>
+                            <li><a class="text-muted" href="#">Услуги</a></li>
+                            <li><a class="text-muted" href="#">Партнеры</a></li>
+                            <li><a class="text-muted" href="#">О компании</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-md">
+                        <h5>Интернет-магазины</h5>
+                        <ul class="list-unstyled text-small">
+                            <li><a class="text-muted" href="#">Доставка и оплата</a></li>
+                            <li><a class="text-muted" href="#">Акции</a></li>
+                            <li><a class="text-muted" href="#">Книги</a></li>
+                            <li><a class="text-muted" href="#">Политика конфиденциальности</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="col-6 col-md">
-                    <h5>Магазины</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="#">Адреса магазинов</a></li>
-                        <li><a class="text-muted" href="#">Услуги</a></li>
-                        <li><a class="text-muted" href="#">Партнеры</a></li>
-                        <li><a class="text-muted" href="#">О компании</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>Интернет-магазины</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="#">Доставка и оплата</a></li>
-                        <li><a class="text-muted" href="#">Акции</a></li>
-                        <li><a class="text-muted" href="#">Книги</a></li>
-                        <li><a class="text-muted" href="#">Политика конфиденциальности</a></li>
-                    </ul>
-                </div>
-            </div>
-        </footer>
-    </div>
-    <script src="js/login.js"></script>
-    <!-- Подключаем Bootstrap JS -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <!--   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>-->
+            </footer>
+        </div>
+        <script src="js/Account.js"></script>
+        <script src="js/Validation.js"></script>
+        <!-- Подключаем Bootstrap JS -->
+        <script src="js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <!--   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>-->
 </body>
 </html>
 
