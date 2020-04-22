@@ -182,6 +182,7 @@ namespace BookShop.Controllers
             return Ok(msg);
         }
 
+
         public string id="";
         public string role;
         public IList<string> x;
@@ -193,7 +194,7 @@ namespace BookShop.Controllers
             User usr;
             usr = await GetCurrentUserAsync(); //получение текущего пользователя
             if (usr != null) id = usr.Id;
-            var message = usr == null ? "Вы Гость. Пожалуйста, выполните вход." :  "Вы вошли как: " + usr.UserName;
+            var message = usr == null ? "" : usr.UserName;
             var msg = new
             {
                 message

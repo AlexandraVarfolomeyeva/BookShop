@@ -132,8 +132,6 @@ function addBook() {
             var inputImg = "../img/empty.png";
         }
         else {
-
-            console.log(x.files);
             var inputImg = "../img/" + x.files[0].name;
         }
         author = [authorSelect];
