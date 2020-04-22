@@ -1,4 +1,4 @@
-﻿function validateForm() {
+﻿function validateRegForm() {
     // проверяем пароли
     // выбираем элементы
     var password1 = document.getElementById('password');
@@ -7,6 +7,7 @@
     if (password1.value !== password2.value) {
         // сообщаем пользователю, можно сделать как угодно
         alert('Пароли не совпадают!');
+        password1.validateForm = false;
         // сообщаем браузеру, что не надо обрабатывать нажатие кнопки
         // как обычно, т. е. не надо отправлять форму
         return false;
@@ -16,7 +17,10 @@
         alert('Пароль должен содержать строчные и прописные латинские буквы, цифры и специальные символы!');
         return false;
     }
+    return true;
+}
 
+function validateTextForm() {
     // проверяем email
     var email = document.getElementById('email');
 
@@ -25,6 +29,8 @@
     // проверяем значение поля email, если нет, то: 
     if (!email_regexp.test(email.value)) {
         alert('Ошибка в email!');
+        email.isvalid = false;
+        email.setAttribute("isvalid", "false")
         return false;
     }
 
@@ -32,12 +38,13 @@
     var phone_regexp = /[0-9]{10}/i;
     // проверяем значение поля , если нет, то: 
     if (!phone_regexp.test(phone.value)) {
-        alert('Ошибка в номере телефона! Пожалуйста, введите только цифры!');
+        alert('Ошибка в номере телефона! Пожалуйста, введите только цифры! Номер телефона должен состоять из 11 цифр, включая +7');
         return false;
     }
 
     var FIO = document.getElementById('fio');
-    var FIO_regexp = /[A-Za-zА-Яа-я- ]{9}+/i;
+    var FIO_regexp = /[A-Za-zА-Яа-я- ]{9,}/i;
+  //  var FIO_regexp ="[A-Za-zА-Яа-яЁё]+(\s+[A-Za-zА-Яа-яЁё]+)?"
     // проверяем значение поля, если нет, то: 
     if (!FIO_regexp.test(FIO.value)) {
         alert('Ошибка в  поле ФИО!');
@@ -50,8 +57,17 @@
         alert('Ошибка в  поле имени пользователя! Допускаются только латинские буквы нижнего регистра, цифры и символы дефис и нижнее подчеркивание!');
         return false;
     }
+    return true;
 }
 
+function validateForm() {
+    if (validateRegForm() && validateTextForm() === true) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
 class obj {
     addThreeToNumber (arr1, arr2) {

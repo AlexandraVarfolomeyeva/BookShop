@@ -78,10 +78,9 @@ function ParseResponse(e) {
                 }
             }
         }
-       else {
-            getCurrentUser();
-        }
-
+       else {      
+                window.location.href = "index.html";
+            }
         // Очистка полей паролей
         document.querySelector("#password").value = "";
         document.querySelector("#passwordConfirm").value = "";
@@ -102,22 +101,6 @@ function logOff() {
     catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
 }
 
-function getCurrentUser() {
-   
-        let request = new XMLHttpRequest();
-        request.open("GET", "/api/Account/WhoisAuthenticated", true);
-        request.onload = function () {
-            if (request.status === 200) {
-                myObj = JSON.parse(request.responseText);
-                ////если удалось получить текущего пользователя, выводим alert и перенаправляем на главную
-                //  alert("Пользователь успешно зарегистрирован!");
-                window.location.href = "index.html";
-
-            }
-        };
-        request.send();
-  
-}
 
 
 

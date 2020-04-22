@@ -13,11 +13,9 @@ var order=0;
 
 function GetOrder() {//получение id текущего заказа и его отображение
     try {
-        var y = "";
         GetRole();
         if (Role === "user") {
-            y += "<a class=\"p-2 text-dark\" href=\"LogIn.html\"> Выйти </a>";
-            getIdUser();
+           getIdUser();
             var request2 = new XMLHttpRequest();
             request2.open("GET", uriOrders, false);
             orders = null;
@@ -36,11 +34,8 @@ function GetOrder() {//получение id текущего заказа и е
             };
             request2.send();
         } else if (Role === "admin") {
-            y += "<a class=\"p-2 text-dark\" href=\"LogIn.html\"> Выйти </a>";
-            var x = "<a class=\"btn btn-dark\" role=\"button\" href=\"admin-panel.html\">Добавить</a>";
+          var x = "<a class=\"btn btn-dark\" role=\"button\" href=\"admin-panel.html\">Добавить</a>";
             document.getElementById("adminDiv").innerHTML = x;//выводим в документ код html    
-        } else if (Role === "") {
-            y += "<a class=\"text-dark\" href=\"LogIn.html\"> Войти </a>";
         }
       //  document.getElementById("login-user").innerHTML=y;//выводим в документ код html    
     } catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }

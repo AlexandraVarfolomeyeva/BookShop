@@ -20,13 +20,14 @@ function logOff() {
     catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
 }
 
+var user;
 function getUserInfo() {
     try {
         var request = new XMLHttpRequest();
         request.open("GET", "api/Account/CurrentUserInfo");
         request.onload = function () {
             if (request.status === 200) {
-                var user = JSON.parse(request.responseText);
+                user = JSON.parse(request.responseText);
                 document.getElementById('fio').value = user.fio;
                 document.getElementById('name').value = user.userName;
                 document.getElementById('email').value = user.email;

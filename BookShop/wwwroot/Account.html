@@ -43,7 +43,7 @@
                     <ul id="formError"></ul>
                 </div>
 
-                <form class="needs-validation" id="regForm" action="javascript:void(0);" novalidate>
+                <form class="needs-validation" id="InfoForm" action="javascript:void(0);" novalidate>
 
                     <div class="mb-3">
                         <label for="fio">ФИО: </label>
@@ -90,6 +90,10 @@
                             Поле "Адрес" не было заполнено или было заполнено неверно.
                         </div>
                     </div>
+                    <button id="changeBtn" class="btn btn-primary btn-lg btn-block" type="submit" onclick="return validateTextForm()">Сохранить изменения</button>
+                </form>
+                <hr>
+                <form class="needs-validation" id="passwordForm" action="javascript:void(0);" novalidate>
                     <h5 class="mb-3"> Изменить пароль: </h5>
                     <div class="mb-3">
                         <label for="OldPassword">Старый пароль: </label>
@@ -117,7 +121,7 @@
 
                     </div>
                     <br />
-                    <button id="changeBtn" class="btn btn-primary btn-lg btn-block" type="submit" onclick="return validateForm()">Сохранить изменения</button>
+                    <button id="changeBtn" class="btn btn-primary btn-lg btn-block" type="submit" onclick="return validateRegForm()">Изменить пароль</button>
                 </form>
 
             </div>
