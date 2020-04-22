@@ -32,6 +32,21 @@
         <button class="btn btn-dark" onclick="createPublisher();">Добавить</button>
     </div>
 
+    <div class="modal1" data-modal="2">
+        <!--   Svg иконка для закрытия окна  -->
+        <svg class="js-modal-close modal__cross" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M23.954 21.03l-9.184-9.095 9.092-9.174-2.832-2.807-9.09 9.179-9.176-9.088-2.81 2.81 9.186 9.105-9.095 9.184 2.81 2.81 9.112-9.192 9.18 9.1z" />
+        </svg>
+        <p class="h3">Добавить автора</p>
+        <br />
+        <input type="text" id="AuthorName" name="AuthorName" class="form-control" placeholder="ФИО автора" required>
+        <div class="invalid-feedback" style="width: 100%;">
+            Поле "ФИО автора" не было заполнено или было заполнено неверно.
+        </div>
+        <br>
+        <button class="btn btn-dark" onclick="createAuthor();">Добавить</button>
+    </div>
+
     <!-- Подложка под модальным окном -->
     <div class="overlay  js-overlay-modal" id="overlay-modal"></div>
 
@@ -70,9 +85,7 @@
                         <!--<input type="text" id="author" name="author" class="form-control" placeholder="Иванов Иван Иванович" required>-->
                         <button>Добавить</button>
                         <div id="authorDiv">  </div>
-                        <button class="btn btn-dark" onclick="createAuthor();">
-                            Создать нового автора
-                        </button>
+                        <button class="btn btn-dark js-open-modal" data-modal="2">Создать</button>
                         <div class="invalid-feedback" style="width: 100%;">
                             Поле "Автор" не было заполнено или было заполнено неверно.
                         </div>
@@ -93,7 +106,7 @@
                         <label for="publisher">Издательство: </label>
                         <select class="custom-select" id="publisherSelect"></select>
                         <!-- <button class="btn btn-dark" onclick="createPublisher();">Создать</button>-->
-                        <a class="a_btn js-open-modal" data-modal="1" href="#">Создать</a>
+                        <button class="btn btn-dark js-open-modal" data-modal="1">Создать</button>
                         <div class="invalid-feedback" style="width: 100%;">
                             Поле "Издательство" не было заполнено или было заполнено неверно.
                         </div>

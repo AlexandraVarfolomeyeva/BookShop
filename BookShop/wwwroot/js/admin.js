@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var modalButtons = document.querySelectorAll('.js-open-modal'),
         overlay = document.querySelector('#overlay-modal'),
-        closeButtons = document.querySelector('.js-modal-close');
+        closeButtons = document.querySelectorAll('.js-modal-close');
 
     overlay.addEventListener('click', function () {
         document.querySelector('.modal1.active').classList.remove('active');
@@ -68,6 +68,32 @@ function downloadAuthors() {
     request.send();
 }
 
+
+function createAuthor() {
+    try {
+        var AuthorName = document.querySelector("#AuthorName").value;
+        var request = new XMLHttpRequest();
+        request.open("POST", uriAuthors);
+        request.onload = function () {
+            // Обработка кода ответа
+            if (request.status == 201) {
+                document.getElementById("AuthorName").value = "";
+                document.querySelector('.modal1.active').classList.remove('active');
+                document.querySelector('#overlay-modal').classList.remove('active');
+                var author = JSON.parse(request.response);
+                var newOption = new Option(author.name, author.id);
+                addForm.authorSelect.options[addForm.authorSelect.options.length] = newOption;
+            } else {
+                alert("Error " + request.status + ": " + request.responseText);
+            }
+        };
+        request.setRequestHeader("Accepts", "application/json;charset=UTF-8");
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        request.send(JSON.stringify({
+            name: AuthorName
+        }));//добавление строки заказа
+    } catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
+}
 
 function createPublisher(){
     try {
