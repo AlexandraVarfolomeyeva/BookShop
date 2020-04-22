@@ -83,7 +83,7 @@ namespace BookShop.Controllers
                 _context.Publisher.Add(publisher); //добавление автора в БД
                 await _context.SaveChangesAsync();//асинхронное сохранение изменений
                 Log.WriteSuccess(" PublisherController.Create", "добавление издательства " + publisher.Id + " в БД");
-                return CreatedAtAction("GetAuthor", new { id = publisher.Id }, publisher);
+                return CreatedAtAction("GetPublisher", new { id = publisher.Id }, publisher);
             }
             catch (Exception ex)
             {

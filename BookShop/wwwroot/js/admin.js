@@ -70,6 +70,33 @@ function downloadAuthors() {
     request.send();
 }
 
+
+function createPublisher(){
+    try {
+    var PublisherTitle = document.querySelector("#PublisherTitle").value;
+    var request = new XMLHttpRequest();
+        request.open("POST", uriPublishers);
+    request.onload = function () {
+        // Обработка кода ответа
+        if (request.status == 201) {
+            document.getElementById("PublisherTitle").value = "";
+            document.querySelector('.modal1.active').classList.remove('active');
+            document.querySelector('#overlay-modal').classList.remove('active');
+            var publisher = JSON.parse(request.response);
+            var newOption = new Option(publisher.name, publisher.id);
+            addForm.publisherSelect.options[addForm.publisherSelect.options.length] = newOption;
+        } else {
+            alert("Error " + request.status+": " + request.responseText);
+        }
+    };
+    request.setRequestHeader("Accepts", "application/json;charset=UTF-8");
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.send(JSON.stringify({
+        name: PublisherTitle
+    }));//добавление строки заказа
+} catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
+}
+
 function getImg() {
     var x = document.getElementById("inputImg");
     document.getElementById('labelImg').innerHTML = x.files[0].name;
