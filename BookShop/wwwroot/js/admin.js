@@ -9,6 +9,17 @@ var elForm = document.querySelector("#addForm");
 
 document.addEventListener("DOMContentLoaded", function () {
 
+    document.querySelector("#addBtn").addEventListener("click", function () {
+        if (elForm.checkValidity() === false) {
+            event.preventDefault()
+            event.stopPropagation()
+        }
+        else {
+            addBook();
+        }
+        elForm.classList.add('was-validated')
+    });
+
     var modalButtons = document.querySelectorAll('.js-open-modal'),
         overlay = document.querySelector('#overlay-modal'),
         closeButtons = document.querySelector('.js-modal-close');
@@ -39,21 +50,8 @@ document.addEventListener("DOMContentLoaded", function () {
             overlay.classList.remove('active');
         });
 
-    }); // end foreach
-
-
-
-    document.querySelector("#addBtn").addEventListener("click", function () {
-        if (elForm.checkValidity() === false) {
-            event.preventDefault()
-            event.stopPropagation()
-        }
-        else {
-            addBook();
-        }
-        elForm.classList.add('was-validated')
-    });
-});//// Обработка клика по кнопке регистрации
+    }); // end foreach  
+});
 
 function downloadAuthors() {
     let request = new XMLHttpRequest();
