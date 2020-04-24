@@ -130,7 +130,7 @@ _userManager.GetUserAsync(HttpContext.User);
             item.BookOrders = order.BookOrders;
             item.DateDelivery = order.DateDelivery;
             item.DateOrder = order.DateOrder;
-            item.SumDelivery = order.SumDelivery;
+//item.SumDelivery = order.SumDelivery;
             item.SumOrder = order.SumOrder;
                 item.Active = order.Active;
             _context.Order.Update(item);

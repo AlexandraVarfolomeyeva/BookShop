@@ -22,9 +22,9 @@ namespace BookShop.Models
         public string UserId { get; set; }
         public DateTime DateDelivery { get; set; }//дата доставки
         public DateTime DateOrder { get; set; }//дата заказа
-        public int SumOrder { get; set; } //стоимость заказа
-        public int SumDelivery { get; set; } //стоимость доставки
+        public float SumOrder { get; set; } //стоимость заказа
         public int Active { get; set; } //является ли заказ активным
+        public int Amount { get; set; } //количество книг в заказе
         //public string Url { get; set; }
         public virtual ICollection<BookOrder> BookOrders { get; set; }
         public virtual User User { get; set; }

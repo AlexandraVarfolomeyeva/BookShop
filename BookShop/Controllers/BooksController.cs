@@ -82,7 +82,7 @@ namespace BookShop.Controllers
                 Book book = new Book();
                 book.Year = item.Year;
                 book.Title = item.Title;
-                book.Store = item.Store;
+                book.Stored = item.Stored;
                 book.image = item.image;
                 book.IdPublisher = item.Publisher;
                 book.Cost = item.Cost;
@@ -125,7 +125,7 @@ namespace BookShop.Controllers
             item.Cost = book.Cost;
             item.image = book.image;
             item.Publisher = book.Publisher;
-            item.Store = book.Store;
+            item.Stored = book.Stored;
             item.BookAuthors = book.BookAuthors;
             item.Title = book.Title;
             item.Year = book.Year;

@@ -34,7 +34,7 @@ namespace BookShop.Controllers
                     bookViews[i] = new BookView();
                     bookViews[i].Id = item.Id;
                     bookViews[i].image = item.image;
-                    bookViews[i].Store = item.Store;
+                    bookViews[i].Stored = item.Stored;
                     bookViews[i].Title = item.Title;
                     bookViews[i].Year = item.Year;
                     bookViews[i].Cost = item.Cost;

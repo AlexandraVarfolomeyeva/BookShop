@@ -64,7 +64,7 @@ namespace BookShop.Controllers
                         Order order = new Order();
                         order.User = user;
                         order.UserId = user.Id;
-                        order.SumDelivery = 50;
+                        //order.SumDelivery = 50;
                         order.SumOrder = 0;
                         order.Active = 1;
                         order.DateDelivery= DateTime.Now.AddMonths(1);

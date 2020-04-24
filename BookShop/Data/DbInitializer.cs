@@ -11,7 +11,25 @@ namespace BookShop.Data
         public static void Initialize(BookingContext context)
         {
             context.Database.EnsureCreated();
-
+            if (!context.User.Any())
+            {
+                var Cities = new City[]
+                {
+                    new City {Name = "Москва", DeliverySum=150},
+                    new City {Name = "Санкт-Петербург", DeliverySum=150},
+                    new City {Name = "Новосибирск", DeliverySum=150},
+                    new City {Name = "Екатеринбург", DeliverySum=150},
+                    new City {Name = "Нижний Новгород", DeliverySum=150},
+                    new City {Name = "Казань", DeliverySum=150},
+                    new City {Name = "Самара", DeliverySum=150},
+                    new City {Name = "Омск", DeliverySum=150}
+                };
+                foreach (City b in Cities)
+                {
+                    context.City.Add(b);
+                }
+                context.SaveChanges();
+            }
             //if (!context.User.Any())
             //{
             //    var users = new User[]
@@ -43,7 +61,7 @@ namespace BookShop.Data
             //}
 
 
-           
+
             //if (!context.BookOrder.Any())
             //{
             //    var bookOrders = new BookOrder[]

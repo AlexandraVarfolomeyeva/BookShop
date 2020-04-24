@@ -109,10 +109,11 @@ services)
                 User admin = new User
                 {
                     Email = adminEmail,
-                    UserName ="admin",
-                    Fio="Администратор",
-                    Address="Russia",
-                    PhoneNumber="9871010101"
+                    UserName = "admin",
+                    Fio = "Администратор",
+                    Address = "Russia",
+                    PhoneNumber = "9871010101",
+                    IdCity = 1
                 };
                 IdentityResult result = await
                 userManager.CreateAsync(admin, adminPassword);
@@ -132,7 +133,8 @@ services)
                     UserName = "user",
                     Fio = "Пользователь",
                     Address = "Russia",
-                    PhoneNumber = "9894343434"
+                    PhoneNumber = "9894343434",
+                    IdCity = 1
                 };
                 IdentityResult result = await
                 userManager.CreateAsync(user, userPassword);

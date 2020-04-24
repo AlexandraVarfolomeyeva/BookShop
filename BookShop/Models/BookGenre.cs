@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookShop.Models
 {
-    public  class BookOrder //строка заказа
+    public class BookGenre
     {
         [Required]
         [Key]
@@ -16,10 +16,9 @@ namespace BookShop.Models
         [ForeignKey("Book")]
         public int IdBook { get; set; }
         [Required]
-        [ForeignKey("Order")]
-        public int IdOrder { get; set; }
-        public int Amount { get; set; } //количество книг в заказе
+        [ForeignKey("Genre")]
+        public int IdGenre { get; set; }
         public virtual Book Book { get; set; }
-        public virtual Order Order { get; set; }
+        public virtual Genre Genre { get; set; }
     }
 }
