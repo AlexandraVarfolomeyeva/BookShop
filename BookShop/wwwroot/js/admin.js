@@ -4,6 +4,7 @@
 const uriBooks = "api/Books/";
 const uriAuthors = "api/Authors/";
 const uriPublishers = "api/Publisher/";
+const uriGenres = "/api/Genre/";
 
 var elForm = document.querySelector("#addForm");
 
@@ -68,6 +69,20 @@ function downloadAuthors() {
     request.send();
 }
 
+function downloadGenres() {
+    let request = new XMLHttpRequest();
+    request.open("GET", uriGenres, true);
+    request.onload = function () {
+        if (request.status === 200) {
+            var genres = JSON.parse(request.responseText);
+            for (i in genres) {
+                var newOption = new Option(genres[i].name, genres[i].id);
+                addForm.GenreSelect.options[addForm.GenreSelect.options.length] = newOption;
+            }
+        }
+    };
+    request.send();
+}
 
 function createAuthor() {
     try {

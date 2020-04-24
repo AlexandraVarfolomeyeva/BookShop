@@ -42,17 +42,20 @@ namespace BookShop.Controllers
                     Publisher publisher = _context.Publisher.Find(item.IdPublisher);
                     List<string> au = new List<string>(); ;
                     bookViews[i].Publisher = publisher.Name;
-                    IEnumerable<BookAuthor> bookauthors = _context.BookAuthor;
+                    IEnumerable<BookAuthor> bookauthors = _context.BookAuthor.Where(b => b.IdBook == item.Id);
+                    IEnumerable<BookGenre> bookgenres = _context.BookGenre.Where(b => b.IdBook==item.Id);
                     foreach (BookAuthor line in bookauthors)
                     {
-
-                        if (line.IdBook == item.Id)
-                        {
                             Author author = _context.Author.Find(line.IdAuthor);
                             au.Add(author.Name);
-                        }
                     }
                     bookViews[i].Authors = au.ToArray();
+                    foreach (BookGenre line in bookgenres)
+                    {
+                            Genre genre = _context.Genre.Find(line.IdGenre);
+                            au.Add(genre.Name);
+                    }
+                    bookViews[i].Genres = au.ToArray();
                     i++;
                 }
                 IEnumerable<BookView> views = bookViews;

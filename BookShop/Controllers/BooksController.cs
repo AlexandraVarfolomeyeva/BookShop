@@ -28,7 +28,7 @@ namespace BookShop.Controllers
         {
             try
             {
-                return _context.Book.Include(p => p.BookOrders);
+                return _context.Book.Include(p => p.BookOrders).Where(book => book.isDeleted == false);
             }
             catch (Exception ex)
             {
@@ -37,10 +37,7 @@ namespace BookShop.Controllers
             }
 
         }
-
-
-      
-
+   
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBook([FromRoute] int id)
@@ -79,14 +76,17 @@ namespace BookShop.Controllers
                     Log.WriteSuccess(" BooksController.Create", "Валидация внутри контроллера неудачна.");
                     return BadRequest(ModelState);
                 }
-                Book book = new Book();
-                book.Year = item.Year;
-                book.Title = item.Title;
-                book.Stored = item.Stored;
-                book.image = item.image;
-                book.IdPublisher = item.Publisher;
-                book.Cost = item.Cost;
-                book.Content = item.Content;
+                Book book = new Book()
+                {
+                Year = item.Year,
+                Title = item.Title,
+                Stored = item.Stored,
+                image = item.image,
+                IdPublisher = item.Publisher,
+                Cost = item.Cost,
+                Content = item.Content,
+                isDeleted=item.isDeleted
+                };
                 _context.Book.Add(book);
                 for (int i = 0; i < item.Authors.Length; i++)
                 {
@@ -120,15 +120,18 @@ namespace BookShop.Controllers
                 Log.WriteSuccess(" BooksController.Update", "Книга не найдена.");
                 return NotFound();
             }
-            item.BookOrders = book.BookOrders;
-            item.Content = book.Content;
-            item.Cost = book.Cost;
-            item.image = book.image;
-            item.Publisher = book.Publisher;
-            item.Stored = book.Stored;
-            item.BookAuthors = book.BookAuthors;
-            item.Title = book.Title;
-            item.Year = book.Year;
+                item.BookOrders = book.BookOrders;
+                item.Content = book.Content;
+                item.Cost = book.Cost;
+                item.image = book.image;
+                item.Publisher = book.Publisher;
+                item.Stored = book.Stored;
+                item.BookAuthors = book.BookAuthors;
+                item.Title = book.Title;
+                item.Year = book.Year;
+                item.isDeleted = book.isDeleted;
+                item.IdPublisher = book.IdPublisher;
+                item.BookGenres = book.BookGenres;
             _context.Book.Update(item);
             await _context.SaveChangesAsync();
             return NoContent();
@@ -156,7 +159,9 @@ namespace BookShop.Controllers
                     Log.WriteSuccess(" BooksController.Delete", "Книга не найдена.");
                     return NotFound();
                 }
-                _context.Book.Remove(item);
+                //_context.Book.Remove(item);
+                item.isDeleted = true;
+                _context.Book.Update(item);
                 await _context.SaveChangesAsync();
                 return NoContent();
             } catch (Exception ex)

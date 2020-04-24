@@ -24,6 +24,9 @@ namespace BookShop.Models
         [Display(Name = "Address")]
         public string Address { get; set; }
         [Required]
+        [Display(Name = "IdCity")]
+        public int IdCity { get; set; }
+        [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }

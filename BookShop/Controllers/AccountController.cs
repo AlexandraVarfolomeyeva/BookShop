@@ -16,7 +16,6 @@ namespace BookShop.Controllers
     [Produces("application/json")]
     public class AccountController : Controller
     {
-        public static event OrderDelegate OrderEvent; //событие создания заказа
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly BookingContext _context;
@@ -45,7 +44,8 @@ namespace BookShop.Controllers
                         UserName = model.UserName,
                         PhoneNumber = model.PhoneNumber,
                         PhoneNumberConfirmed = true,
-                        Address = model.Address
+                        Address = model.Address,
+                        IdCity = model.IdCity
                     };
                     // Добавление нового пользователя
                     var result = await _userManager.CreateAsync(user,
@@ -60,15 +60,18 @@ namespace BookShop.Controllers
                         {
                             message = "Добавлен новый пользователь: " + user.UserName
                         };
-                      //  await CreateFirstOrder(user.Id);
-                        Order order = new Order();
-                        order.User = user;
-                        order.UserId = user.Id;
-                        //order.SumDelivery = 50;
-                        order.SumOrder = 0;
-                        order.Active = 1;
-                        order.DateDelivery= DateTime.Now.AddMonths(1);
-                        order.DateOrder = DateTime.Now;
+                        //  await CreateFirstOrder(user.Id);
+                        Order order = new Order()
+                        {
+                            User = user,
+                            UserId = user.Id,
+                            Amount = 0,
+                            Active = 1,
+                            SumOrder = 0,
+                            DateDelivery = DateTime.Now.AddDays(user.City.DeliveryTime),
+                            DateOrder = DateTime.Now
+                    };
+                      //  order.DateDelivery= DateTime.Now.AddMonths(1);
                         _context.Order.Add(order); //добавление заказа в БД
                         await _context.SaveChangesAsync();//асинхронное сохранение изменений
                         Log.WriteSuccess(" OrdersController.Create", "добавление заказа " + order.Id + " в БД");
@@ -89,7 +92,6 @@ namespace BookShop.Controllers
                             e.Errors.Select(er => er.ErrorMessage))
                         };
                         return BadRequest(errorMsg);
-                        //return Ok(errorMsg);
                     }
                 }
                 else
@@ -102,7 +104,6 @@ namespace BookShop.Controllers
                         e.Errors.Select(er => er.ErrorMessage))
                     };
                     return BadRequest(errorMsg);
-                  // return Ok(errorMsg);
                 }
             }
             catch (Exception ex)
@@ -114,7 +115,6 @@ namespace BookShop.Controllers
                     error = ModelState.Values.SelectMany(e =>
                     e.Errors.Select(er => er.ErrorMessage))
                 };
-                //return Ok(errorMsg);
                 return BadRequest(errorMsg);
             }
         }
@@ -177,7 +177,6 @@ namespace BookShop.Controllers
             Log.WriteSuccess("AccountController.LogOff", "Выполнен выход.");
             var msg = new
             {
-
                 message = "Выполнен выход."
             };
             return Ok(msg);
@@ -200,7 +199,6 @@ namespace BookShop.Controllers
             {
                 message
             };
-           
             return Ok(msg);
         }
         private Task<User> GetCurrentUserAsync() =>

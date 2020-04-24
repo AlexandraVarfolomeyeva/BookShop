@@ -15,6 +15,7 @@ namespace BookShop.Models
         public string Content { get; set; } //Описание (аннотация) книги
         public string Title { get; set; } //Название книги
         public int Publisher { get; set; }
+        public bool isDeleted  { get; set; }
         public int[] Authors { get; set; }
     }
 }

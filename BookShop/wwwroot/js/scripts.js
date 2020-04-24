@@ -4,6 +4,7 @@ const uriOrders = "/api/Orders/";
 const uriPublisher = "/api/Publisher/";
 const uriAuthors = "/api/Authors/";
 const uriBookAuthor = "/api/BookAuthor/";
+const uriBookGenre = "/api/BookGenre/";
 const uriView = "/api/View/";
 let items = null;
 let books = null;

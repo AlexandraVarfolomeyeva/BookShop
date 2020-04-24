@@ -25,7 +25,6 @@ namespace BookShop.Controllers
         {
             _userManager = userManager;
             _context = context; // получаем контекст базы данных
-            AccountController.OrderEvent += new OrderDelegate(Create); //получаем id текущего пользователя из AccountController
         }
         public static event IdDelegate IDEvent; //событие по получению id текущего пользователя из AccountController
 
@@ -94,12 +93,14 @@ _userManager.GetUserAsync(HttpContext.User);
                     Log.WriteSuccess(" OrdersController.Create", "Валидация внутри контроллера неудачна.");
                     return BadRequest(ModelState);
                 }
+                User user = await _userManager.GetUserAsync(HttpContext.User);
                 Log.WriteSuccess(" OrdersController.Create", "Данные валидны.");
-                if (order.UserId == "1")
-                    order.UserId = IDEvent().Result;
                 Log.WriteSuccess(" OrdersController.Create", "Id user"+ order.UserId);
                 order.DateDelivery = DateTime.Now;
-                order.DateDelivery = order.DateDelivery.AddMonths(1);
+                order.DateDelivery = DateTime.Now.AddDays(user.City.DeliveryTime);
+                order.Active = 1;
+                order.Amount = 0;
+                order.SumOrder = 0;
                 _context.Order.Add(order); //добавление заказа в БД
                 await _context.SaveChangesAsync();//асинхронное сохранение изменений
                 Log.WriteSuccess(" OrdersController.Create", "добавление заказа "+ order.Id + " в БД");
@@ -136,7 +137,7 @@ _userManager.GetUserAsync(HttpContext.User);
             _context.Order.Update(item);
             await _context.SaveChangesAsync();
              Log.WriteSuccess(" OrdersController.Update", "обновление заказа " + order.Id + " в БД.");
-                GetDiscountAsync();
+             //   GetDiscountAsync();
              return NoContent();
         }
             catch (Exception ex)

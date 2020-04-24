@@ -15,7 +15,7 @@
    
     <link href="css/ModalWindow.css" rel="stylesheet">
 </head>
-<body onload="downloadAuthors(); downloadPublishers();">
+<body onload="downloadAuthors(); downloadPublishers(); downloadGenres(); ">
 
     <div class="modal1" data-modal="1">
         <!--   Svg иконка для закрытия окна  -->
@@ -91,6 +91,15 @@
                         </div>
                     </div>
                     <div class="mb-3">
+                        <label for="Genre">Жанр: </label>
+                        <select class="custom-select" id="GenreSelect"></select>
+                         <button>Добавить</button>
+                        <div id="GenreDiv">  </div>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "Автор" не было заполнено или было заполнено неверно.
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label for="content">Описание: </label>
                         <textarea type="text" autocomplete="off" id="content" name="content" class="form-control" placeholder="Добавить описание" required></textarea>
                     </div>
@@ -119,13 +128,14 @@
                             Поле "Цена" не было заполнено или было заполнено неверно.
                         </div>
                     </div>
-                    <hr class="mb-4">
                     <div class="mb-3">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="store">
-                            <label class="custom-control-label" for="store">Наличие на складе</label>
+                        <label for="Stored"> Количество на складе (шт.): </label>
+                        <input type="number" id="Stored" name="Stored" class="form-control" value="0" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Поле "Количество на складе" не было заполнено или было заполнено неверно.
                         </div>
                     </div>
+                    <hr class="mb-4">
                     <br />
 
                 </form>

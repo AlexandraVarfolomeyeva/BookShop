@@ -67,7 +67,6 @@ namespace BookShop.Controllers
         [Authorize(Roles = "user")]
         public async Task<IActionResult> Create([FromBody] BookOrder item)
         {//создание новой строки заказа
-         //  string id = IDEvent().Result;//получили id пользователя
             try
             {
                 if (!ModelState.IsValid)
@@ -75,8 +74,17 @@ namespace BookShop.Controllers
                     Log.WriteSuccess("BookOrderController.Create", "Валидация внутри контроллера неудачна.");
                     return BadRequest(ModelState);
                 }
+                IEnumerable<BookOrder> books = _context.BookOrder.Where(a => a.IdBook == item.IdBook);
+                foreach (BookOrder book  in books)
+                {
+                    book.Amount++;
+                    _context.BookOrder.Update(book);
+                }
+                if (!books.Any()) {
+                    item.Amount = 1;
+                    _context.BookOrder.Add(item);
 
-                _context.BookOrder.Add(item);
+                }
                 await _context.SaveChangesAsync();
                 Log.WriteSuccess("BookOrderController.Create", "Добавлена новая строка заказа.");
                 return CreatedAtAction("GetBookOrder", new { id = item.Id }, item);
