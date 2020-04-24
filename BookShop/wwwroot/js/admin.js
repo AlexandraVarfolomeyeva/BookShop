@@ -163,12 +163,14 @@ function addBook() {
     try {
         var title = document.querySelector("#title").value;
         var authorSelect = document.querySelector("#authorSelect").value; ///authorSelect
+        var genreSelect = document.querySelector("#GenreSelect").value; ///authorSelect
         var content = document.querySelector("#content").value;
         var year = document.querySelector("#year").value;
         var publisherSelect = document.querySelector("#publisherSelect").value; ///publisherSelect
         var cost = document.querySelector("#cost").value;
-        var store = document.querySelector("#store").checked;
+        var stored = document.querySelector("#Stored").value;
         var x = document.getElementById("inputImg");
+
         if (x.files.length == 0) {
             var inputImg = "../img/empty.png";
         }
@@ -176,7 +178,7 @@ function addBook() {
             var inputImg = "../img/" + x.files[0].name;
         }
         author = [authorSelect];
-
+        genre = [genreSelect];
         var request = new XMLHttpRequest();
         request.open("POST", uriBooks);
         request.onload = function () {
@@ -193,11 +195,12 @@ function addBook() {
             image: inputImg,
             year: year,
             cost: cost,
-            store: store,
+            stored: stored,
             content: content,
             title: title,
             publisher: publisherSelect,
-            authors: author        
+            authors: author,
+            genres:genre
         }));//добавление строки заказа
     } catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
 }
