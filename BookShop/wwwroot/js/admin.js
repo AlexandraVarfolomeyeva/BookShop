@@ -4,7 +4,7 @@
 const uriBooks = "api/Books/";
 const uriAuthors = "api/Authors/";
 const uriPublishers = "api/Publisher/";
-const uriGenres = "/api/Genre/";
+const uriGenres = "api/Genre/";
 
 var elForm = document.querySelector("#addForm");
 

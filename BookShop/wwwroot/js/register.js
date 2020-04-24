@@ -1,4 +1,5 @@
 ﻿const uri = "api/account/Register";
+const uriCities = "api/City/";
 let myObj = "";
 var elForm = document.querySelector("#regForm");
 
@@ -14,7 +15,23 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         elForm.classList.add('was-validated')
     });
+   // downloadCities();
 });//// Обработка клика по кнопке регистрации
+
+function downloadCities() {
+    let request = new XMLHttpRequest();
+    request.open("GET", uriCities, true);
+    request.onload = function () {
+        if (request.status === 200) {
+            var cities = JSON.parse(request.responseText);
+            for (i in cities) {
+                var newOption = new Option(cities[i].name, cities[i].id);
+                regForm.citySelect.options[regForm.citySelect.options.length] = newOption;
+            }
+        }
+    };
+    request.send();
+}
 
 function Register() {
     try {
@@ -26,6 +43,7 @@ function Register() {
         var address = document.querySelector("#address").value;
         var phoneNumber = document.querySelector("#phone").value;
         var password = document.querySelector("#password").value;
+        var citySelect = document.querySelector("#citySelect").value;
         var passwordConfirm = document.querySelector("#passwordConfirm").value;
         let request = new XMLHttpRequest();
 
