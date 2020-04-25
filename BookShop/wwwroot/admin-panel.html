@@ -6,16 +6,17 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
-    <title>Добавить книгу</title>
+    <title>Информация о книге</title>
 
     <!-- Подключаем Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <!-- Bootstrap core CSS -->
     <!--  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
-   
+
+    <link rel="stylesheet" href="css/Styles.css">
     <link href="css/ModalWindow.css" rel="stylesheet">
 </head>
-<body onload="downloadAuthors(); downloadPublishers(); downloadGenres(); ">
+<body>
 
     <div class="modal1" data-modal="1">
         <!--   Svg иконка для закрытия окна  -->
@@ -146,10 +147,11 @@
                 <div class="text-center">
                     <img src="./img/empty.png" id="bookImg" class="rounded" alt="Обложка" width="150" height="215">
                 </div>
+
                 <hr class="mb-4">
                 <div class="input-group mb-3">
                     <div class="custom-file">
-                        <input type="file" id="inputImg" accept=".png, .jpg, .jpeg" onchange="getImg()">
+                        <input type="file" class="custom-file-input" aria-describedby="inputGroupFileAddon03"  id="inputImg" accept=".png, .jpg, .jpeg" onchange="getImg()">
                         <label id="labelImg" class="custom-file-label" for="inputImg">Выбрать файл</label>
                     </div>
                 </div>

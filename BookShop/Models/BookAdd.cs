@@ -16,7 +16,9 @@ namespace BookShop.Models
         public string Title { get; set; } //Название книги
         public int Publisher { get; set; }
         public bool isDeleted  { get; set; }
-        public int[] Authors { get; set; }
-        public int[] Genres { get; set; }
+        public int[] idAuthors { get; set; }
+        public string[] Authors { get; set; }
+        public int[] idGenres { get; set; }
+        public string[] Genres { get; set; }
     }
 }

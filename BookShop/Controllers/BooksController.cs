@@ -92,7 +92,7 @@ namespace BookShop.Controllers
                 {
                     BookAuthor bookauthor = new BookAuthor()
                     {
-                            IdAuthor = item.Authors[i],
+                            IdAuthor = item.idAuthors[i],
                             IdBook = book.Id
                     };
                     _context.BookAuthor.Add(bookauthor);
@@ -101,7 +101,7 @@ namespace BookShop.Controllers
                 {
                     BookGenre bookgenre = new BookGenre()
                     {
-                        IdGenre = item.Genres[i],
+                        IdGenre = item.idGenres[i],
                         IdBook = book.Id
                     };
                     _context.BookGenre.Add(bookgenre);

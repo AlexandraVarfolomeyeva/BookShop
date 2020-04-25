@@ -2,25 +2,47 @@
 
 
 const uriBooks = "api/Books/";
+const uriView = "/api/View/";
 const uriAuthors = "api/Authors/";
 const uriPublishers = "api/Publisher/";
 const uriGenres = "api/Genre/";
+var idBook;
+var selectedPub;
+var authors = [];
+var genres = [];
 
 var elForm = document.querySelector("#addForm");
 
 document.addEventListener("DOMContentLoaded", function () {
-
-    document.querySelector("#addBtn").addEventListener("click", function () {
-        if (elForm.checkValidity() === false) {
-            event.preventDefault()
-            event.stopPropagation()
-        }
-        else {
-            addBook();
-        }
-        elForm.classList.add('was-validated')
-    });
-
+    downloadAuthors(); downloadPublishers(); downloadGenres();
+    var params = decodeURIComponent(location.search.substr(1)).split('&');
+    params.splice(0, 1);
+    idBook = params[0];
+    console.log(idBook);
+    if (!idBook) {
+        document.querySelector("#addBtn").addEventListener("click", function () {
+            if (elForm.checkValidity() === false) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            else {
+                addBook();
+            }
+            elForm.classList.add('was-validated')
+        });
+    } else {
+        getBookData();
+        document.querySelector("#addBtn").addEventListener("click", function () {
+            if (elForm.checkValidity() === false) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            else {
+                saveBook();
+            }
+            elForm.classList.add('was-validated')
+        });
+    }
     var modalButtons = document.querySelectorAll('.js-open-modal'),
         overlay = document.querySelector('#overlay-modal'),
         closeButtons = document.querySelectorAll('.js-modal-close');
@@ -59,10 +81,14 @@ function downloadAuthors() {
     request.open("GET", uriAuthors, true);
     request.onload = function () {
         if (request.status === 200) {
-            var authors = JSON.parse(request.responseText);
-            for (i in authors) {
-                var newOption = new Option(authors[i].name, authors[i].id);
+           var authorsOptions= JSON.parse(request.responseText);
+            for (i in authorsOptions) {
+                var newOption = new Option(authorsOptions[i].name, authorsOptions[i].id);
                 addForm.authorSelect.options[addForm.authorSelect.options.length] = newOption;
+            }
+            if (authors.length > 0) {
+                document.querySelector("#authorSelect").value = authors[0].value;
+                deleteauthoroption(0);
             }
         }
     };
@@ -74,17 +100,21 @@ function downloadGenres() {
     request.open("GET", uriGenres, true);
     request.onload = function () {
         if (request.status === 200) {
-            var genres = JSON.parse(request.responseText);
-            for (i in genres) {
-                var newOption = new Option(genres[i].name, genres[i].id);
+            var genreOptions = JSON.parse(request.responseText);
+            for (i in genreOptions) {
+                var newOption = new Option(genreOptions[i].name, genreOptions[i].id);
                 addForm.GenreSelect.options[addForm.GenreSelect.options.length] = newOption;
+            }
+            if (genres.length > 0) {
+                document.querySelector("#GenreSelect").value = genres[0].value;
+                deletegenreoption(0);
             }
         }
     };
     request.send();
 }
 
-var authors = [];
+
 function getSelectedAuthors() {
     var x = "";
   for (i in authors) {
@@ -94,7 +124,7 @@ function getSelectedAuthors() {
 }
 function newauthor(){
   
-    var selector = document.querySelector("#authorSelect")
+    var selector = document.querySelector("#authorSelect");
     var value = selector[selector.selectedIndex].value;
     var text = selector[selector.selectedIndex].text;
     authors.push({ value: value, text: text });
@@ -106,7 +136,6 @@ function deleteauthoroption(index) {
 }
 
 
-var genres = [];
 function getSelectedGenres() {
     var x = "";
     for (i in genres) {
@@ -121,7 +150,6 @@ function newgenre() {
     genres.push({ value: value, text: text });
     getSelectedGenres();
 }
-
 function deletegenreoption(index) {
     genres.splice(index, 1);
     getSelectedGenres();
@@ -201,6 +229,7 @@ function downloadPublishers() {
                 var newOption = new Option(publishers[i].name, publishers[i].id);
                 addForm.publisherSelect.options[addForm.publisherSelect.options.length] = newOption;
             }
+            if (selectedPub) { document.querySelector("#publisherSelect").value = selectedPub; }
         }
     };
     request.send();
@@ -256,8 +285,89 @@ function addBook() {
             content: content,
             title: title,
             publisher: publisherSelect,
-            authors: author,
-            genres:genre
+            idAuthors: author,
+            idGenres: genre
+        }));//добавление строки заказа
+    } catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
+}
+
+function getBookData() {
+    var request2 = new XMLHttpRequest();
+    var url = uriView + idBook;
+    request2.open("GET", url, false);//получение данных текущего заказа
+    request2.onload = function () {
+        if (request2.status === 200) {
+           var book = JSON.parse(request2.responseText);
+            document.querySelector("#title").value = book.title;
+            document.querySelector("#content").value = book.content;
+            document.querySelector("#year").value = book.year;
+            document.querySelector("#cost").value = book.cost;
+            document.querySelector("#Stored").value = book.stored;
+            document.getElementById("bookImg").src = book.image;
+            document.getElementById('labelImg').innerHTML = book.image;
+            selectedPub = book.publisher;
+            for (i in book.authors) {
+               authors.push({ value: book.idAuthors[i], text: book.authors[i]});
+            }
+            
+            for (i in book.genres) {
+                genres.push({ value: book.idGenres[i], text: book.genres[i] });
+            }
+        } else {
+            alert("Возникла ошибка, попробуйте обновить.");
+        }
+    };
+    request2.send();
+}
+
+function saveBook() {
+    try {
+        var title = document.querySelector("#title").value;
+        var authorSelect = document.querySelector("#authorSelect").value; ///authorSelect
+        var genreSelect = document.querySelector("#GenreSelect").value; ///authorSelect
+        var content = document.querySelector("#content").value;
+        var year = document.querySelector("#year").value;
+        var publisherSelect = document.querySelector("#publisherSelect").value; ///publisherSelect
+        var cost = document.querySelector("#cost").value;
+        var stored = document.querySelector("#Stored").value;
+        var x = document.getElementById("inputImg");
+
+        var author = [];
+        var genre = [];
+        if (x.files.length != 0) {
+            var inputImg = "../img/" + x.files[0].name;
+        }
+        for (i in authors) {
+            author.push(authors[i].value);
+        }
+        author.push(authorSelect);
+        for (i in genres) {
+            genre.push(genres[i].value);
+        }
+        genre.push(genreSelect);
+        var request = new XMLHttpRequest();
+        var url = uriView + idBook;
+        request.open("PUT", url);
+        request.onload = function () {
+            // Обработка кода ответа
+            if (request.status == 204) {
+                window.location.href = "index.html";
+            } else {
+                alert("Error");
+            }
+        };
+        request.setRequestHeader("Accepts", "application/json;charset=UTF-8");
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        request.send(JSON.stringify({
+            image: inputImg,
+            year: year,
+            cost: cost,
+            stored: stored,
+            content: content,
+            title: title,
+            publisher: publisherSelect,
+            idAuthors: author,
+            idGenres: genre
         }));//добавление строки заказа
     } catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
 }
