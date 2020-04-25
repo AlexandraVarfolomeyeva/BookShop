@@ -136,6 +136,7 @@ namespace BookShop.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] BookAdd book)
         {//обновление информации о существующей книге возможно только администратором
             try

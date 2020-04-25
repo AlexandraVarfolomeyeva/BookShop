@@ -123,14 +123,16 @@ function getSelectedAuthors() {
     document.getElementById("authorDiv").innerHTML = x;
 }
 function newauthor(){
-  
     var selector = document.querySelector("#authorSelect");
     var value = selector[selector.selectedIndex].value;
     var text = selector[selector.selectedIndex].text;
     authors.push({ value: value, text: text });
+    selector.removeChild(selector[selector.selectedIndex]);
     getSelectedAuthors();
 }
 function deleteauthoroption(index) {
+    var newOption = new Option(authors[index].text, authors[index].value);
+    addForm.authorSelect.options[addForm.authorSelect.options.length] = newOption;
     authors.splice(index, 1);
     getSelectedAuthors();
 }
@@ -148,9 +150,12 @@ function newgenre() {
     var value = selector[selector.selectedIndex].value;
     var text = selector[selector.selectedIndex].text;
     genres.push({ value: value, text: text });
+    selector.removeChild(selector[selector.selectedIndex]);
     getSelectedGenres();
 }
 function deletegenreoption(index) {
+    var newOption = new Option(genres[index].text, genres[index].value);
+    addForm.GenreSelect.options[addForm.GenreSelect.options.length] = newOption;
     genres.splice(index, 1);
     getSelectedGenres();
 }
@@ -330,13 +335,11 @@ function saveBook() {
         var publisherSelect = document.querySelector("#publisherSelect").value; ///publisherSelect
         var cost = document.querySelector("#cost").value;
         var stored = document.querySelector("#Stored").value;
-        var x = document.getElementById("inputImg");
 
         var author = [];
         var genre = [];
-        if (x.files.length != 0) {
-            var inputImg = "../img/" + x.files[0].name;
-        }
+        var inputImg = "../img/" +document.getElementById('labelImg').innerHTML;
+        
         for (i in authors) {
             author.push(authors[i].value);
         }

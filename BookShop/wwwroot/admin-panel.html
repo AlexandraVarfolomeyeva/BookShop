@@ -86,7 +86,7 @@
                         <select class="custom-select" id="authorSelect"></select>
                         <!--<input type="text" id="author" name="author" class="form-control" placeholder="Иванов Иван Иванович" required>-->
                         <button class="btn btn-light js-open-modal" onclick="newauthor();">Добавить еще одного автора</button>
-                        
+
                         <button class="btn btn-dark js-open-modal" data-modal="2">Создать</button>
                         <div class="invalid-feedback" style="width: 100%;">
                             Поле "Автор" не было заполнено или было заполнено неверно.
@@ -97,7 +97,7 @@
                         <div id="GenreDiv">  </div>
                         <select class="custom-select" id="GenreSelect"></select>
                         <button class="btn btn-light js-open-modal" onclick="newgenre();">Добавить еще один жанр</button>
-                        
+
                         <div class="invalid-feedback" style="width: 100%;">
                             Поле "Автор" не было заполнено или было заполнено неверно.
                         </div>
@@ -151,7 +151,7 @@
                 <hr class="mb-4">
                 <div class="input-group mb-3">
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" aria-describedby="inputGroupFileAddon03"  id="inputImg" accept=".png, .jpg, .jpeg" onchange="getImg()">
+                        <input type="file" class="custom-file-input" aria-describedby="inputGroupFileAddon03" id="inputImg" accept=".png, .jpg, .jpeg" onchange="getImg()">
                         <label id="labelImg" class="custom-file-label" for="inputImg">Выбрать файл</label>
                     </div>
                 </div>
@@ -161,6 +161,10 @@
         <div class="row">
             <button id="addBtn" class="btn btn-primary btn-lg btn-block" type="submit">Сохранить</button>
         </div>
+
+
+  
+
         <footer class="pt-4 my-md-5 pt-md-5 border-top">
             <div class="row">
                 <div class="col-12 col-md">
@@ -188,7 +192,6 @@
             </div>
         </footer>
     </div>
-
 
 
     <script src="js/admin.js"></script>
