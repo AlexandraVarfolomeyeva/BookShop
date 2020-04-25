@@ -81,7 +81,12 @@ namespace BookShop.Controllers
                     return BadRequest(ModelState);
                 }
                 Log.WriteSuccess(" AuthorsController.Create", "Данные валидны.");
-                _context.Author.Add(author); //добавление автора в БД
+                IEnumerable<Author> authors = _context.Author.Include(p => p.BookAuthors).Where(d => d.Name == author.Name);
+                if (!authors.Any()) { _context.Author.Add(author); } //добавление автора в БД
+                else {
+                    Log.WriteSuccess(" AuthorsController.Create", "Попытка добавить существующего автора!");
+                    return Conflict();
+                }
                 await _context.SaveChangesAsync();//асинхронное сохранение изменений
                 Log.WriteSuccess(" AuthorsController.Create", "добавление автора " + author.Id + " в БД");
                 return CreatedAtAction("GetAuthor", new { id = author.Id }, author);

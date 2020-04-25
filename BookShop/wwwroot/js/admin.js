@@ -115,7 +115,6 @@ function getSelectedGenres() {
     document.getElementById("GenreDiv").innerHTML = x;
 }
 function newgenre() {
-
     var selector = document.querySelector("#GenreSelect")
     var value = selector[selector.selectedIndex].value;
     var text = selector[selector.selectedIndex].text;
@@ -143,6 +142,8 @@ function createAuthor() {
                 var author = JSON.parse(request.response);
                 var newOption = new Option(author.name, author.id);
                 addForm.authorSelect.options[addForm.authorSelect.options.length] = newOption;
+            } else if (request.status == 409) {
+                alert("Автор с таким именем уже существует!");
             } else {
                 alert("Error " + request.status + ": " + request.responseText);
             }
@@ -169,7 +170,10 @@ function createPublisher(){
             var publisher = JSON.parse(request.response);
             var newOption = new Option(publisher.name, publisher.id);
             addForm.publisherSelect.options[addForm.publisherSelect.options.length] = newOption;
-        } else {
+        } else if (request.status == 409) {
+            alert("Издательство с таким названием уже существует!");
+        }
+        else {
             alert("Error " + request.status+": " + request.responseText);
         }
     };
