@@ -88,7 +88,7 @@ var authors = [];
 function getSelectedAuthors() {
     var x = "";
   for (i in authors) {
-     x += "<div class=\"input-group mb-3\"> <input type=\"text\" readonly class=\"form-control\" aria-describedby=\"button-addon2\" value=\"" + authors[i].text + "\"> <div class=\"input-group-append\"><button class=\"btn btn-outline-secondary\" type=\"button\" id=\"button-addon2\" onclick=\"deleteauthoroption(" + i + ");\">Удалить</button></div></div>";
+     x += "<div class=\"input-group mb-3\"> <input type=\"text\" readonly class=\"form-control\" aria-describedby=\"button-addon2\" value=\"" + authors[i].text + "\"> <div class=\"input-group-append\"><button class=\"btn btn-outline-secondary\" type=\"button\" onclick=\"deleteauthoroption(" + i + ");\">Удалить</button></div></div>";
  }
     document.getElementById("authorDiv").innerHTML = x;
 }
@@ -100,11 +100,34 @@ function newauthor(){
     authors.push({ value: value, text: text });
     getSelectedAuthors();
 }
-
 function deleteauthoroption(index) {
     authors.splice(index, 1);
     getSelectedAuthors();
 }
+
+
+var genres = [];
+function getSelectedGenres() {
+    var x = "";
+    for (i in genres) {
+        x += "<div class=\"input-group mb-3\"> <input type=\"text\" readonly class=\"form-control\" aria-describedby=\"button-addon2\" value=\"" + genres[i].text + "\"> <div class=\"input-group-append\"><button class=\"btn btn-outline-secondary\" type=\"button\" onclick=\"deletegenreoption(" + i + ");\">Удалить</button></div></div>";
+    }
+    document.getElementById("GenreDiv").innerHTML = x;
+}
+function newgenre() {
+
+    var selector = document.querySelector("#GenreSelect")
+    var value = selector[selector.selectedIndex].value;
+    var text = selector[selector.selectedIndex].text;
+    genres.push({ value: value, text: text });
+    getSelectedGenres();
+}
+
+function deletegenreoption(index) {
+    genres.splice(index, 1);
+    getSelectedGenres();
+}
+
 
 function createAuthor() {
     try {
@@ -194,7 +217,7 @@ function addBook() {
         var x = document.getElementById("inputImg");
 
         var author=[];
-
+        var genre = [];
         if (x.files.length == 0) {
             var inputImg = "../img/empty.png";
         }
@@ -205,7 +228,10 @@ function addBook() {
             author.push(authors[i].value);
              }
           author.push(authorSelect);
-        genre = [genreSelect];
+        for (i in genres) {
+            genre.push(genres[i].value);
+        }
+        genre.push(genreSelect);
         var request = new XMLHttpRequest();
         request.open("POST", uriBooks);
         request.onload = function () {
