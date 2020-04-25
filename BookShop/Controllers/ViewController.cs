@@ -26,7 +26,7 @@ namespace BookShop.Controllers
         {
             try
             {
-                IEnumerable<Book> books = _context.Book.Include(p => p.BookOrders);
+                IEnumerable<Book> books = _context.Book.Include(p => p.BookOrders).Where(d=>d.isDeleted==false);
                 BookView[] bookViews = new BookView[books.Count()];
                 int i = 0;
                 foreach (Book item in books)
