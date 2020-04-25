@@ -164,13 +164,25 @@ namespace BookShop.Controllers
                     Log.WriteSuccess(" BooksController.Delete", "Валидация внутри контроллера неудачна.");
                     return BadRequest(ModelState);
                 }
-                var item = _context.Book.Find(id);
+                Book item = _context.Book.Find(id);
                 if (item == null)
                 {
                     Log.WriteSuccess(" BooksController.Delete", "Книга не найдена.");
                     return NotFound();
                 }
                 //_context.Book.Remove(item);
+                IEnumerable <BookOrder> lines = _context.BookOrder.Where(l=>l.IdBook==id);
+                foreach (BookOrder i in lines)
+                {
+                    Order order = _context.Order.Find(i.IdOrder);
+                    if (order.Active == 1)
+                    {
+                        order.Amount -= i.Amount;
+                        order.SumOrder -= item.Cost * i.Amount;
+                        _context.Order.Update(order);
+                        _context.BookOrder.Remove(i);
+                    }
+                }
                 item.isDeleted = true;
                 _context.Book.Update(item);
                 await _context.SaveChangesAsync();
