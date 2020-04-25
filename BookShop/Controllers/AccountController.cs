@@ -54,21 +54,22 @@ namespace BookShop.Controllers
                     if (result.Succeeded)//если успешно
                     {
                         Log.WriteSuccess("AccountController.Register", "Пользователь добавлен и вошел в систему.");
-                        await _userManager.AddToRoleAsync(user, "user");//роль - пользователь
+                        IdentityResult x = await _userManager.AddToRoleAsync(user, "user");//роль - пользователь
                         
                         var msg = new
                         {
                             message = "Добавлен новый пользователь: " + user.UserName
                         };
-                        //  await CreateFirstOrder(user.Id);
-                        Order order = new Order()
+
+                        IEnumerable<City> b =  _context.City.Where(c => c.Id == user.IdCity);
+                       Order order = new Order()
                         {
                             User = user,
                             UserId = user.Id,
                             Amount = 0,
                             Active = 1,
                             SumOrder = 0,
-                            DateDelivery = DateTime.Now.AddDays(user.City.DeliveryTime),
+                            DateDelivery = DateTime.Now.AddDays(b.FirstOrDefault().DeliveryTime),
                             DateOrder = DateTime.Now
                     };
                       //  order.DateDelivery= DateTime.Now.AddMonths(1);

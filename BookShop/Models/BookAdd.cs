@@ -17,5 +17,6 @@ namespace BookShop.Models
         public int Publisher { get; set; }
         public bool isDeleted  { get; set; }
         public int[] Authors { get; set; }
+        public int[] Genres { get; set; }
     }
 }

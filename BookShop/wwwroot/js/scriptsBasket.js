@@ -1,6 +1,6 @@
 ﻿const uri = "/api/Books/";
 const uri1 = "/api/BookOrder/";
-const uri2 = "/api/Orders/";
+const uriOrders = "/api/Orders/";
 var order;
 let items = null;
 let books = null;
@@ -10,7 +10,7 @@ var x = "";
 function GetOrder() {//получение id текущего заказа и его отображение
     try {
         var request2 = new XMLHttpRequest();
-        request2.open("GET", uri2, false);
+        request2.open("GET", uriOrders, false);
         orders = null; x = "";
         request2.onload = function () {
             orders = JSON.parse(request2.responseText);
@@ -35,7 +35,7 @@ function loadHistory() {//загрузка истории заказов пол�
     try {
         var i, y = "";
         var request = new XMLHttpRequest();
-        request.open("GET", uri2, false);
+        request.open("GET", uriOrders, false);
         request.onload = function () {
             orders = JSON.parse(request.responseText);
             for (i in orders) {
@@ -78,7 +78,7 @@ function loadBooks(){//загрузить книги
 function MakeOrder() {//Active=0, создать новый текущий заказ для этого пользователя
     try {
         var request = new XMLHttpRequest();
-        var url = uri2 + order; //получить текущий заказ
+        var url = uriOrders + order; //получить текущий заказ
         request.open("GET", url, false);
         request.onload = function () {
             if (request.status === 200) {

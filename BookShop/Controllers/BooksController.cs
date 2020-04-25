@@ -90,12 +90,23 @@ namespace BookShop.Controllers
                 _context.Book.Add(book);
                 for (int i = 0; i < item.Authors.Length; i++)
                 {
-                    BookAuthor bookauthor = new BookAuthor();
-                    bookauthor.IdAuthor = item.Authors[i];
-                    bookauthor.IdBook = book.Id;
+                    BookAuthor bookauthor = new BookAuthor()
+                    {
+                            IdAuthor = item.Authors[i],
+                            IdBook = book.Id
+                    };
                     _context.BookAuthor.Add(bookauthor);
                 }
-                 await _context.SaveChangesAsync();
+                for (int i = 0; i < item.Genres.Length; i++)
+                {
+                    BookGenre bookgenre = new BookGenre()
+                    {
+                        IdGenre = item.Genres[i],
+                        IdBook = book.Id
+                    };
+                    _context.BookGenre.Add(bookgenre);
+                }
+                await _context.SaveChangesAsync();
 
                 return CreatedAtAction("GetBook", new { id = book.Id }, book);
             } catch (Exception ex)

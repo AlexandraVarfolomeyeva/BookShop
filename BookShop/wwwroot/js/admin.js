@@ -84,6 +84,28 @@ function downloadGenres() {
     request.send();
 }
 
+var authors = [];
+function getSelectedAuthors() {
+    var x = "";
+  for (i in authors) {
+     x += "<div class=\"input-group mb-3\"> <input type=\"text\" readonly class=\"form-control\" aria-describedby=\"button-addon2\" value=\"" + authors[i].text + "\"> <div class=\"input-group-append\"><button class=\"btn btn-outline-secondary\" type=\"button\" id=\"button-addon2\" onclick=\"deleteauthoroption(" + i + ");\">Удалить</button></div></div>";
+ }
+    document.getElementById("authorDiv").innerHTML = x;
+}
+function newauthor(){
+  
+    var selector = document.querySelector("#authorSelect")
+    var value = selector[selector.selectedIndex].value;
+    var text = selector[selector.selectedIndex].text;
+    authors.push({ value: value, text: text });
+    getSelectedAuthors();
+}
+
+function deleteauthoroption(index) {
+    authors.splice(index, 1);
+    getSelectedAuthors();
+}
+
 function createAuthor() {
     try {
         var AuthorName = document.querySelector("#AuthorName").value;
@@ -171,13 +193,18 @@ function addBook() {
         var stored = document.querySelector("#Stored").value;
         var x = document.getElementById("inputImg");
 
+        var author=[];
+
         if (x.files.length == 0) {
             var inputImg = "../img/empty.png";
         }
         else {
             var inputImg = "../img/" + x.files[0].name;
         }
-        author = [authorSelect];
+        for (i in authors) {
+            author.push(authors[i].value);
+             }
+          author.push(authorSelect);
         genre = [genreSelect];
         var request = new XMLHttpRequest();
         request.open("POST", uriBooks);

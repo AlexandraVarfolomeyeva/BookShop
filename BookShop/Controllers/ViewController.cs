@@ -31,16 +31,19 @@ namespace BookShop.Controllers
                 int i = 0;
                 foreach (Book item in books)
                 {
-                    bookViews[i] = new BookView();
-                    bookViews[i].Id = item.Id;
-                    bookViews[i].image = item.image;
-                    bookViews[i].Stored = item.Stored;
-                    bookViews[i].Title = item.Title;
-                    bookViews[i].Year = item.Year;
-                    bookViews[i].Cost = item.Cost;
-                    bookViews[i].Content = item.Content;
+                    bookViews[i] = new BookView()
+                    {
+                            Id = item.Id,
+                            image = item.image,
+                            Stored = item.Stored,
+                            Title = item.Title,
+                            Year = item.Year,
+                            Cost = item.Cost,
+                            Content = item.Content
+                    };
                     Publisher publisher = _context.Publisher.Find(item.IdPublisher);
-                    List<string> au = new List<string>(); ;
+                    List<string> au = new List<string>();
+                    List<string> ge = new List<string>();
                     bookViews[i].Publisher = publisher.Name;
                     IEnumerable<BookAuthor> bookauthors = _context.BookAuthor.Where(b => b.IdBook == item.Id);
                     IEnumerable<BookGenre> bookgenres = _context.BookGenre.Where(b => b.IdBook==item.Id);
@@ -53,9 +56,9 @@ namespace BookShop.Controllers
                     foreach (BookGenre line in bookgenres)
                     {
                             Genre genre = _context.Genre.Find(line.IdGenre);
-                            au.Add(genre.Name);
+                            ge.Add(genre.Name);
                     }
-                    bookViews[i].Genres = au.ToArray();
+                    bookViews[i].Genres = ge.ToArray();
                     i++;
                 }
                 IEnumerable<BookView> views = bookViews;

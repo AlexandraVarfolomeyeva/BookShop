@@ -57,39 +57,39 @@ function getIdUser() {
 }
 
 
-function CreateFirstOrder() {
-    try {
-        GetRole();
-        if (Role === "user") {
-            if (order === 0) {
-                var request1 = new XMLHttpRequest();
-                request1.open("POST", "/api/Orders/", false);
-                request1.setRequestHeader("Accepts",
-                    "application/json;charset=UTF-8");
-                request1.setRequestHeader("Content-Type",
-                    "application/json;charset=UTF-8");
-                request1.onload = function () {
+////function CreateFirstOrder() {
+////    try {
+////        GetRole();
+////        if (Role === "user") {
+////            if (order === 0) {
+////                var request1 = new XMLHttpRequest();
+////                request1.open("POST", "/api/Orders/", false);
+////                request1.setRequestHeader("Accepts",
+////                    "application/json;charset=UTF-8");
+////                request1.setRequestHeader("Content-Type",
+////                    "application/json;charset=UTF-8");
+////                request1.onload = function () {
 
 
-                    GetOrder();
+////                    GetOrder();
 
-                };
-                request1.send(JSON.stringify({
+////                };
+////                request1.send(JSON.stringify({
 
-                    dateDelivery: "0001-01-01",
-                    dateOrder: "0001-01-01",
-                    sumDelivery: 50,
-                    sumOrder: 0,
-                    active: 1,
-                    userId: "1"
-                }));
-            } else alert("У вас уже существует активный заказ! Прежде чем создавать новый вам надо заказать текущий на вкладке Корзина!");
-        } else alert("У вас не хватает прав!");
+////                    dateDelivery: "0001-01-01",
+////                    dateOrder: "0001-01-01",
+////                    sumDelivery: 50,
+////                    sumOrder: 0,
+////                    active: 1,
+////                    userId: "1"
+////                }));
+////            } else alert("У вас уже существует активный заказ! Прежде чем создавать новый вам надо заказать текущий на вкладке Корзина!");
+////        } else alert("У вас не хватает прав!");
 
       
-    }
-    catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
-}
+////    }
+////    catch (e) { alert("Возникла непредвиденая ошибка! Попробуйте позже!"); }
+////}
 
 var Role="";
 function GetRole() {
@@ -158,34 +158,13 @@ function loadBooks() { //загрузка книг
 
 function loadBasket() { //загружаем корзину, в которой отображается количество книг и сумма текущего заказа
     try {
-        var i, x = "<div class=\"jumbotron p-4 p-md-5 text-white rounded bg-dark\">" +
+        var x = "<div class=\"jumbotron p-4 p-md-5 text-white rounded bg-dark\">" +
           "  <a class=\"h3 display-5 text-white align-items-center\" href=\"Basket.html\">Корзина</a>" +
            " <div class=\"msgClass\">"+
               "  <div id=\"msgAuth\"></div>"+
                 "<div id=\"msg\"></div>"+
                 "<ul id=\"formError\"></ul>";
-        items = null;
-        var k = 0; //счетчик количества книг в заказе
         if (order) { //если текущий заказ определен
-            var request = new XMLHttpRequest();
-            request.open("GET", uriBookOrder, false); //получение строк заказа
-            request.onload = function () {
-                if (request.status === 200) {
-                    items = JSON.parse(request.responseText);
-                //    x += "<br />";
-                    for (i in items) {
-                        if (items[i].idOrder === order) {
-                            k += 1; //считаем количество записей в текущем заказе
-                        }
-                    }
-
-                    x += "<label class=\"lead text - small\"> Книг: " + k + "</label><br />";
-                    //document.getElementById("BasketDiv").innerHTML = x;
-                } else {
-                    alert("Возникла ошибка, попробуйте обновить.");
-                }
-            };
-            request.send();
             var request2 = new XMLHttpRequest();
             var url = uriOrders + order;
             request2.open("GET", url, false);//получение данных текущего заказа
@@ -193,6 +172,7 @@ function loadBasket() { //загружаем корзину, в которой �
             request2.onload = function () {
                 if (request2.status === 200) {
                     orderCurrent = JSON.parse(request2.responseText);
+                    x += "<label class=\"lead text - small\"> Книг: " + orderCurrent.amount + "</label><br />";
                     x += "<label class=\"lead text-small\"> Сумма: " + orderCurrent.sumOrder + "</label >";
                     x += "</div ></div>";
                     document.getElementById("BasketDiv").innerHTML = x;
@@ -211,32 +191,17 @@ function add(id, sum) {
     try {
         var bookOrder = {
         'IdBook': id,
-        'IdOrder': order
+        'IdOrder': order,
+        'Amount': 1,
+        'Sum':sum
     }
     var request = new XMLHttpRequest();
     request.open("POST", uriBookOrder);
     request.onload = function () {
         // Обработка кода ответа
         if (request.status === 201) {
-            uriOrder = uriOrders + order;//получение текущего заказа
-            var request1 = new XMLHttpRequest();
-            request1.open("GET", uriOrder, false);
-            var item;///Получение данных о заказе + сумму новой книги
-            request1.onload = function () {
-                item = JSON.parse(request1.responseText);
-                item.sumOrder += sum;//к сумме текущего заказа прибавляется стоимость книги
-                ///Изменение данных о заказе -- отправка изменений в БД
-                var request2 = new XMLHttpRequest();
-                request2.open("PUT", uriOrder);
-                request2.onload = function () {
                     loadBasket();//загрузка корзины для обновления данных о заказе
-                };
-                request2.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-                request2.send(JSON.stringify(item));
-            };
-            request1.send();
-            
-        } else if (request.status === 404) {
+        } else if (request.status === 401) {
             alert("Пожалуйста, авторизируйтесь");
         } else {
             alert("Неизвестная ошибка");

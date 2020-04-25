@@ -65,7 +65,7 @@ namespace BookShop.Controllers
 
     [HttpPost]
         [Authorize(Roles = "user")]
-        public async Task<IActionResult> Create([FromBody] BookOrder item)
+        public async Task<IActionResult> Create([FromBody] BookOrderForm item)
         {//создание новой строки заказа
             try
             {
@@ -74,20 +74,30 @@ namespace BookShop.Controllers
                     Log.WriteSuccess("BookOrderController.Create", "Валидация внутри контроллера неудачна.");
                     return BadRequest(ModelState);
                 }
+            
                 IEnumerable<BookOrder> books = _context.BookOrder.Where(a => a.IdBook == item.IdBook);
                 foreach (BookOrder book  in books)
                 {
                     book.Amount++;
                     _context.BookOrder.Update(book);
                 }
+                BookOrder bookorder = new BookOrder()
+                    {
+                        IdBook = item.IdBook,
+                        IdOrder = item.IdOrder,
+                        Amount = 1
+                    };
                 if (!books.Any()) {
-                    item.Amount = 1;
-                    _context.BookOrder.Add(item);
-
+               
+                    _context.BookOrder.Add(bookorder);
                 }
+                Order order = _context.Order.Find(item.IdOrder);
+                order.SumOrder += item.Sum;
+                order.Amount++;
+                _context.Order.Update(order);
                 await _context.SaveChangesAsync();
                 Log.WriteSuccess("BookOrderController.Create", "Добавлена новая строка заказа.");
-                return CreatedAtAction("GetBookOrder", new { id = item.Id }, item);
+                return  CreatedAtAction("GetBookOrder", new { id = bookorder.Id }, bookorder);
             }
             catch (Exception ex)
             {

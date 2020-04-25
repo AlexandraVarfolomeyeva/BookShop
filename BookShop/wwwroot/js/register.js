@@ -63,6 +63,7 @@ function Register() {
             userName: userName,
             phoneNumber: phoneNumber,
             address: address,
+            idCity: citySelect,
             password: password,
             passwordConfirm: passwordConfirm
         }));
